@@ -46,6 +46,7 @@ def display(stock_id):
 def vote():
     if request.method == "POST":
         number = request.form['From']
+        print request.form
         # number exists
         if from_number in numbers:
             client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')

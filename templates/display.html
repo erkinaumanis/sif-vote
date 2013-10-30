@@ -15,7 +15,7 @@
   
   <tbody>
     {% for stock in stocks %}
-    <tr id="project{{loop.index0}}" >
+    <tr id="stock{{loop.index0}}" >
       <td class="id"> {{"ABCDEFGHIJLKMNOPQRS"[loop.index0]}} </td>
       <td class="name"> {{stock.name}} </td>
       <td class="name"> {{stock.action}} </td>
@@ -37,10 +37,10 @@
   $(document).ready(function() {
     setInterval(function() {
       $.get("/list", function(data) {
-      for (var i = 0; i < data.projects.length; i++) {
-        var project = data.projects[i];
-        $("#project" + i + " .votes").html(project.votes);
-        $("#project" + i + " .bar").css("width",project.votes*3.5)
+      for (var i = 0; i < data.stocks.length; i++) {
+        var stock = data.stocks[i];
+        $("#stock" + i + " .votes").html(stock.votes);
+        $("#stock" + i + " .bar").css("width",stock.votes*3.5)
       }
       console.log('Load was performed.');
       });
