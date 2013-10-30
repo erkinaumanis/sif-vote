@@ -17,7 +17,7 @@ client = TwilioRestClient(TWILIO_ID, TWILIO_TOKEN)
 
 numbers = set()
 stocks = [
-{"id": 0, "ticker": "CAT", "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 0, "result": None},
+{"id": 0, "ticker": "CAT", "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 3, "result": None},
 {"id": 1, "ticker": "CAT", "name": "Caterpillar", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "decision": "Don't Buy", "votes": 0, "result": None},
 {"id": 2, "ticker": "PM", "name": "Phillip Morris", "action": "Buy", "amount": "$15,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 0, "result": None},
 {"id": 3, "ticker": "PM", "name": "Phillip Morris", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "decision": "Don't Buy", "votes": 0, "result": None},
@@ -33,6 +33,7 @@ def index():
 
 @app.route('/list', methods=['GET'])
 def list():
+    print "here"
     return jsonify(stocks=stocks)
 
 @app.route('/vote/<int:stock_id>', methods=['GET'])
