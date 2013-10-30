@@ -5,27 +5,27 @@
 <table class="table">
   <thead>
     <tr>
-      <th class="span1">ID</th>
       <th class="span2">Stock Name</th>
       <th class="span2">Action</th>
+      <th class="span2">Amount</th>
       <th class="span5">Votes</th>
+      <th class="span1">Count</th>
     </tr>
   </thead>
   
   <tbody>
     {% for stock in stocks %}
       <tr id="stock{{loop.index0}}" >
-        <td class="id"> {{"ABCDEFGHIJLKMNOPQRSTUVWXYZ"[loop.index0]}} </td>
-        <td class="name"> {{stock.name}} </td>
-        <td class="name"> {{stock.action}} </td>
-        <td class="name"> {{stock.amount}} </td>
-        <td>
+        <td class="span2"> {{stock.name}} </td>
+        <td class="span2"> {{stock.action}} </td>
+        <td class="span2"> {{stock.amount}} </td>
+        <td class="span5">
           <div class="progress progress-{{["info","success", "alert", "warning"][loop.index0]}}">
-            <div class="bar"
-                 style="width: {{stock.votes*3.5}};"></div>
+              <div class="bar"
+                   style="width: {{stock.votes * 10}};"></div>
           </div>
         </td>
-        <td class="votes"> {{stock.votes}} </td>
+        <td class="span1"> {{stock.votes}} </td>
       </tr>
     {% endfor %}
   </tbody>

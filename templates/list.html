@@ -4,12 +4,10 @@
 
   <thead>
     <tr>
-      <th class="span2">Company Name</th>
+      <th class="span3">Company Name</th>
       <th class="span2">Status</th>
       <th class="span2">Date</th>
-      <th class="span2">View Result</th>
-        <div>
-      <th class="span2"></th>
+      <th class="span2">Outcome</th>
     </tr>
   </thead>
 
@@ -18,7 +16,9 @@
       <td class="name"> {{stock.name}} </td>
       <td class="status"> {{stock.status}} </td>
       <td class="date"> {{stock.date}} </td>
-      <td class="result"> {{stock.result}} </td>
+      <td class="result">         
+        <a href="/vote/{{stock.id}}">View Result</a>
+      </td>
     </tr>
   {% endfor %}
 
