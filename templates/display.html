@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th class="span1">ID</th>
+      <th class="span2">Stock Name</th>
+      <th class="span2">Action</th>
+      <th class="span5"></th>
+      <th class="span1">Votes</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    {% for stock in stocks %}
+    <tr id="project{{loop.index0}}" >
+      <td class="id"> {{"ABCDEFGHIJLKMNOPQRS"[loop.index0]}} </td>
+      <td class="name"> {{stock.name}} </td>
+      <td class="name"> {{stock.action}} </td>
+      <td class="name"> {{stock.amount}} </td>
+      <td>
+        <div class="progress progress-{{["info","success", "alert", "warning"][loop.index0]}}">
+          <div class="bar"
+               style="width: {{stock.votes*3.5}};"></div>
+        </div>
+      </td>
+      <td class="votes"> {{stock.votes}} </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+</div>
+
+<script type='text/javascript'>
+  $(document).ready(function() {
+    setInterval(function() {
+      $.get("/list", function(data) {
+      for (var i = 0; i < data.projects.length; i++) {
+        var project = data.projects[i];
+        $("#project" + i + " .votes").html(project.votes);
+        $("#project" + i + " .bar").css("width",project.votes*3.5)
+      }
+      console.log('Load was performed.');
+      });
+    }, 2000);
+  });
+</script>
+
+
+{% endblock %}

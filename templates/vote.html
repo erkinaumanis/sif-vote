@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+
+<tbody>
+  {% for project in projects %}
+  <tr id="project{{loop.index0}}" >
+    <td class="id"> {{"ABCDEFGHIJLKMNOPQRS"[loop.index0]}} </td>
+    <td class="name"> {{project.name}} </td>
+    <td>
+      <div class="progress progress-{{["info","success", "alert", "warning"][loop.index0]}}">
+        <div class="bar"
+             style="width: {{project.votes*3.5}};"></div>
+      </div>
+    </td>
+    <td class="votes"> {{project.votes}} </td>
+  </tr>
+  {% endfor %}
+</tbody>
+
+{% endblock %}
