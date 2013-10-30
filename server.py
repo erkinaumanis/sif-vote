@@ -63,9 +63,7 @@ def recieve():
                     numbers.add(from_number)
                     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
                     break
-                else:
-                    client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
-                    break
+            client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
     return jsonify(request.form)
 
 if __name__ == '__main__':
