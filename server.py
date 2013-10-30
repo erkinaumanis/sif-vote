@@ -33,15 +33,11 @@ def index():
 
 @app.route('/list', methods=['GET'])
 def list():
-    print "here"
     return jsonify(stocks=stocks)
 
 @app.route('/vote/<int:stock_id>', methods=['GET'])
 def vote(stock_id):
-    vote_stocks = []
-    for s in stocks:
-        if stock_id == s["id"] or s["id"] == stock_id + 1:
-            vote_stocks.append(s)
+    vote_stocks = _filter_unique(stocks, stock_id)
     return render_template('display.html', stocks=vote_stocks)
 
 @app.route('/recieve', methods=['POST'])
@@ -65,6 +61,13 @@ def recieve():
                     break
             client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
     return jsonify(request.form)
+
+def _filter_unique(stocks, stock_id):
+    vote_stocks = []
+    for s in stocks:
+        if stock_id == s["id"] or s["id"] == stock_id + 1:
+            vote_stocks.append(s)
+    return vote_stocks
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

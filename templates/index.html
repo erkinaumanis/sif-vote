@@ -12,7 +12,7 @@
     <div class="container">
       <div class="header">
         <h1>CMC Student Investment Fund Voting </h1>
-        <h3>Powered by Twilio</h3>
+        <h3>Text: (303) 816-3058 </h3>
       </div>
       
       <div class="results span10 well offset1">
@@ -33,9 +33,13 @@
       setInterval(function() {
         $.get("/list", function(data) {
         for (var i = 0; i < data.stocks.length; i++) {
-          var stock = data.stocks[i];
-          $("#stock" + i + " .votes").html(stock.votes);
-          $("#stock" + i + " .bar").css("width",stock.votes*10)
+          if ($(location).attr('href').split("/").pop() == data.stocks[i].id ||
+              $(location).attr('href').split("/").pop() == data.stocks[i].id + 1) {
+            // console.log(data.stocks[i]);
+            var stock = data.stocks[i];
+            $("#stock" + i + " .votes").html(stock.votes);
+            $("#stock" + i + " .bar").css("width",stock.votes*10)
+          }
         }
         console.log('Load was performed.');
         });
