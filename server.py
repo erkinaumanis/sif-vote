@@ -48,10 +48,10 @@ def vote(stock_id):
 def recieve():
     print "here"
     if request.method == "POST":
-        from_number = request.values.get("From")
+        number = request.values.get("From")
 
         # number exists
-        if from_number in numbers:
+        if number in numbers:
             client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
         else:
             body = request.values.get('Body').lower()
