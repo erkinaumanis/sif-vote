@@ -1,18 +1,19 @@
 import os
 from flask import Flask, request, redirect, g, render_template, jsonify
-from lib import tokens
 import twilio.twiml
+from twilio.rest import TwilioRestClient
 import logging
 import pdb
-
 
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+TWILIO_NUM = "+13038163058"
+TWILIO_ID = "ACfdd41e08b900b330579f39feb9366f4d"
+TWILIO_TOKEN = "d951d114074f6d3aeb672672383f8ab3"
 
-connect('claremont-sms-db', host='mongodb://' + 'evan' + ':' + tokens.DB_PASSWORD + '@' + tokens.DB_HOST_ADDRESS)
-client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
+client = TwilioRestClient(TWILIO_ID, TWILIO_TOKEN)
 
 stocks = [
 {"id": 0, "ticker": "CAT", "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 0, "result": None},
@@ -47,12 +48,12 @@ def vote():
         number = request.form['From']
         # number exists
         if from_number in numbers:
-            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
+            client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
         else:
             body = request.form['Body'].lower()
             letters = "ABCDEFGHIJKLMNOP"
             if len(body) != 1 or ident == -1 or ident >= len(projects):
-                client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='That is an invalid vote, please try again!')
+                client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
             else:
                 ticker = body.rsplit(" ", 1)[0]
                 vote = body.rsplit(" ", 1)[1]
@@ -61,9 +62,9 @@ def vote():
                         s["votes"] += 1
                         break
                     else:
-                        client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='That is an invalid vote, please try again!')
+                        client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
                 numbers.add(from_number)
-                client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
+                client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
     return str(resp)
 
 if __name__ == '__main__':
