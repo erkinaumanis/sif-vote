@@ -48,7 +48,7 @@ def vote(stock_id):
 def recieve():
     print "here"
     if request.method == "POST":
-        number = request.values.get("From")
+        from_number = request.values.get("From")
 
         # number exists
         if from_number in numbers:
