@@ -12,10 +12,10 @@ app.config.from_object(__name__)
 
 numbers = set()
 stocks = [
-{"id": 0, "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "votes":0, "result": None},
-{"id": 1, "name": "Caterpillar", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "votes":0, "result": None},
-{"id": 2, "name": "Phillip Morris", "action": "Buy", "amount": "$15,000", "status": "Active", "date": "10/29", "votes":0, "result": None},
-{"id": 3, "name": "Phillip Morris", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "votes":0, "result": None},
+{"id": 0, "ticker": "CAT", "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "votes":0, "result": None},
+{"id": 1, "ticker": "CAT", "name": "Caterpillar", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "votes":0, "result": None},
+{"id": 2, "ticker": "PM", "name": "Phillip Morris", "action": "Buy", "amount": "$15,000", "status": "Active", "date": "10/29", "votes":0, "result": None},
+{"id": 3, "ticker": "PM", "name": "Phillip Morris", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "votes":0, "result": None},
 ]
 
 @app.route('/')
@@ -46,13 +46,16 @@ def vote():
     if from_number in numbers:
         resp.sms("Thanks, but you already voted!")
     else:
-        body = request.form['Body'].strip()
+        body = request.form['Body'].lower()
         letters = "ABCDEFGHIJKLMNOP"
-        ident = letters.find(body)
         if len(body) != 1 or ident == -1 or ident >= len(projects):
             resp.sms('That is an invalid vote, please try again!')
         else:
-            stocks[ident]['votes'] += 1
+            ticker = body.split(" ", 1)[0]
+            vote = body.split(" ", 1)[1]
+            for s in stocks:
+                if s["ticker"] == ticker and s["vote"] == vote:
+                    s["votes"] += 1
             numbers.add(from_number)
             resp.sms('Thank you for your vote!')
     return str(resp)
