@@ -54,21 +54,17 @@ def recieve():
         if number in numbers:
             client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
         else:
-            body = request.values.get('Body').lower()
-            letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            if len(body) != 1 or ident == -1 or ident >= len(projects):
-                client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
-            else:
-                ticker = body.rsplit(" ", 1)[0]
-                vote = body.rsplit(" ", 1)[1]
-                for s in stocks:
-                    if s["decision"] == vote and s["ticker"] == ticker:
-                        s["votes"] += 1
-                        numbers.add(from_number)
-                        client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
-                        break
-                    else:
-                        client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')                                
+            body = request.values.get('Body').lower()            
+            ticker = body.rsplit(" ", 1)[0]
+            vote = body.rsplit(" ", 1)[1]
+            for s in stocks:
+                if s["decision"] == vote and s["ticker"] == ticker:
+                    s["votes"] += 1
+                    numbers.add(from_number)
+                    client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
+                    break
+                else:
+                    client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')                                
     return jsonify(request.form)
 
 if __name__ == '__main__':
