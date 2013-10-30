@@ -55,8 +55,8 @@ def recieve():
             client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
         else:
             body = request.values.get('Body').lower()            
-            ticker = body.rsplit(" ", 1)[0]
-            vote = body.rsplit(" ", 1)[1]
+            ticker = body.rsplit(" ", 1)[1]
+            vote = body.rsplit(" ", 1)[0]
             for s in stocks:
                 if s["decision"].lower() == vote and s["ticker"].lower() == ticker:
                     s["votes"] += 1
