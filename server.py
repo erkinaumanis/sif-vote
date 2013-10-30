@@ -56,6 +56,8 @@ def vote():
             for s in stocks:
                 if s["decision"] == vote and s["ticker"] == ticker:
                     ["votes"] += 1
+                else:
+                    resp.sms('That is an invalid vote, please try again!')
             numbers.add(from_number)
             resp.sms('Thank you for your vote!')
     return str(resp)
