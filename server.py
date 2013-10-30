@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, redirect, g, render_template, jsonify
+from lib import tokens
 import twilio.twiml
 import logging
 import pdb
@@ -10,7 +11,9 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 
-numbers = set()
+connect('claremont-sms-db', host='mongodb://' + 'evan' + ':' + tokens.DB_PASSWORD + '@' + tokens.DB_HOST_ADDRESS)
+client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
+
 stocks = [
 {"id": 0, "ticker": "CAT", "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 0, "result": None},
 {"id": 1, "ticker": "CAT", "name": "Caterpillar", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "decision": "Don't Buy", "votes": 0, "result": None},
@@ -40,26 +43,27 @@ def display(stock_id):
 
 @app.route('/vote', methods=['POST'])
 def vote():
-    from_number = request.form['From']
-    # number exists
-    resp = twilio.twiml.Response()
-    if from_number in numbers:
-        resp.sms("Thanks, but you already voted!")
-    else:
-        body = request.form['Body'].lower()
-        letters = "ABCDEFGHIJKLMNOP"
-        if len(body) != 1 or ident == -1 or ident >= len(projects):
-            resp.sms('That is an invalid vote, please try again!')
+    if request.method == "POST":
+        number = request.form['From']
+        # number exists
+        if from_number in numbers:
+            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
         else:
-            ticker = body.rsplit(" ", 1)[0]
-            vote = body.rsplit(" ", 1)[1]
-            for s in stocks:
-                if s["decision"] == vote and s["ticker"] == ticker:
-                    s["votes"] += 1
-                else:
-                    resp.sms('That is an invalid vote, please try again!')
-            numbers.add(from_number)
-            resp.sms('Thank you for your vote!')
+            body = request.form['Body'].lower()
+            letters = "ABCDEFGHIJKLMNOP"
+            if len(body) != 1 or ident == -1 or ident >= len(projects):
+                client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='That is an invalid vote, please try again!')
+            else:
+                ticker = body.rsplit(" ", 1)[0]
+                vote = body.rsplit(" ", 1)[1]
+                for s in stocks:
+                    if s["decision"] == vote and s["ticker"] == ticker:
+                        s["votes"] += 1
+                        break
+                    else:
+                        client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='That is an invalid vote, please try again!')
+                numbers.add(from_number)
+                client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
     return str(resp)
 
 if __name__ == '__main__':
