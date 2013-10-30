@@ -15,6 +15,7 @@ TWILIO_TOKEN = "d951d114074f6d3aeb672672383f8ab3"
 
 client = TwilioRestClient(TWILIO_ID, TWILIO_TOKEN)
 
+numbers = set()
 stocks = [
 {"id": 0, "ticker": "CAT", "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 0, "result": None},
 {"id": 1, "ticker": "CAT", "name": "Caterpillar", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "decision": "Don't Buy", "votes": 0, "result": None},
@@ -22,7 +23,7 @@ stocks = [
 {"id": 3, "ticker": "PM", "name": "Phillip Morris", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "decision": "Don't Buy", "votes": 0, "result": None},
 ]
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     unique_stocks = []
     for s in stocks:
@@ -30,29 +31,30 @@ def index():
             unique_stocks.append(s)
     return render_template('list.html', stocks=unique_stocks)
 
-@app.route('/list')
+@app.route('/list', methods=['GET'])
 def list():
     return jsonify(stocks=stocks)
 
-@app.route('/vote/<int:stock_id>')
-def display(stock_id):
+@app.route('/vote/<int:stock_id>', methods=['GET'])
+def vote(stock_id):
     vote_stocks = []
     for s in stocks:
         if stock_id == s["id"] or s["id"] == stock_id + 1:
             vote_stocks.append(s)
     return render_template('display.html', stocks=vote_stocks)
 
-@app.route('/vote', methods=['POST'])
-def vote():
+@app.route('/recieve', methods=['POST'])
+def recieve():
+    print "here"
     if request.method == "POST":
-        number = request.form['From']
-        print request.form
+        number = request.values.get("From")
+
         # number exists
         if from_number in numbers:
             client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
         else:
-            body = request.form['Body'].lower()
-            letters = "ABCDEFGHIJKLMNOP"
+            body = request.values.get('Body').lower()
+            letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             if len(body) != 1 or ident == -1 or ident >= len(projects):
                 client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
             else:
@@ -61,12 +63,12 @@ def vote():
                 for s in stocks:
                     if s["decision"] == vote and s["ticker"] == ticker:
                         s["votes"] += 1
+                        numbers.add(from_number)
+                        client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
                         break
                     else:
-                        client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
-                numbers.add(from_number)
-                client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
-    return str(resp)
+                        client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')                                
+    return jsonify(request.form)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
