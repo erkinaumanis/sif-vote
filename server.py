@@ -55,7 +55,7 @@ def vote():
             vote = body.rsplit(" ", 1)[1]
             for s in stocks:
                 if s["decision"] == vote and s["ticker"] == ticker:
-                    ["votes"] += 1
+                    s["votes"] += 1
                 else:
                     resp.sms('That is an invalid vote, please try again!')
             numbers.add(from_number)
