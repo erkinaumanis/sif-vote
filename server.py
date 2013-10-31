@@ -42,7 +42,6 @@ def vote(stock_id):
 
 @app.route('/recieve', methods=['POST'])
 def recieve():
-    print "here"
     if request.method == "POST":
         number = request.values.get("From")
 
@@ -57,7 +56,7 @@ def recieve():
             for s in stocks:
                 if s["decision"].lower() == vote and s["ticker"].lower() == ticker:
                     s["votes"] += 1
-                    numbers.add(from_number)
+                    numbers.add(number)
                     valid = True
                     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
                     break
