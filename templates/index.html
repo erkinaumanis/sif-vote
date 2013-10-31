@@ -32,14 +32,10 @@
     $(document).ready(function() {
       setInterval(function() {
         $.get("/list", function(data) {
-        for (var i = 0; i < data.stocks.length; i++) {
-          if ($(location).attr('href').split("/").pop() == data.stocks[i].id ||
-              $(location).attr('href').split("/").pop() == data.stocks[i].id + 1) {
-            // console.log(data.stocks[i]);
+        for (var i = 0; i < data.stocks.length; i++) {          
             var stock = data.stocks[i];
             $("#stock" + i + " .votes").html(stock.votes);
             $("#stock" + i + " .bar").css("width",stock.votes*10)
-          }
         }
         console.log('Load was performed.');
         });
