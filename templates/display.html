@@ -25,7 +25,11 @@
                    style="width: {{stock.votes * 10}};"></div>
           </div>
         </td>
-        <td class="span1"> {{stock.votes}} </td>
+        <td class="span1">
+            <div class="votes">
+                {{stock.votes}} 
+            </div>
+        </td>
       </tr>
     {% endfor %}
   </tbody>
