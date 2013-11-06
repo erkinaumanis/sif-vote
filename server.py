@@ -53,6 +53,7 @@ def recieve():
         # if number in numbers:
         #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
         # else:
+        # sweet
         body = request.values.get('Body').lower()            
         ticker = body.rsplit(" ", 1)[1]
         vote = body.rsplit(" ", 1)[0]
