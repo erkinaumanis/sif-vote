@@ -16,7 +16,7 @@
   
   <tbody>
     {% for stock in stocks %}      
-      <tr id="stock{{loop.index0}}" >
+      <tr id="stock{{stock.id}}" >
         <td class="span2"> {{stock.name}}</td>
         <td class="span1"> {{stock.ticker}}</td>
         <td class="span2"> {{stock.action}} </td>
