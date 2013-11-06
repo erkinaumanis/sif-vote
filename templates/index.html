@@ -12,7 +12,7 @@
     <div class="container">
       <div class="header">
         <h1>CMC Student Investment Fund Voting </h1>
-        <h3>Text: (303) 816-3058 </h3>
+        <h3>Directions: Text "Buy ____" or "Don't Buy ____" to (303) 816-3058 </h3>
       </div>
       
       <div class="results span10 well offset1">
@@ -32,16 +32,23 @@
     $(document).ready(function() {
       setInterval(function() {
         $.get("/list", function(data) {
-        for (var i = 0; i < data.stocks.length; i++) {          
-            var stock = data.stocks[i];
-            $("#stock" + i + " .votes").html(stock.votes);
-            $("#stock" + i + " .bar").css("width",stock.votes*10)
-        }
+            var num1 = $(location).attr('href').split("/").pop();
+            var num2 = $(location).attr('href').split("/").pop() + 1;
+            // console.log(data.stocks[i]);
+            var stock1 = data.stocks[num1];
+            var stock2 = data.stocks[num2];
+            $("#stock" + num1 + " .votes").html(stock1.votes);
+            $("#stock" + num1 + " .bar").css("width",stock1.votes*10);
+            $("#stock" + num2 + " .votes").html(stock2.votes);
+            $("#stock" + num2 + " .bar").css("width",stock2.votes*10);
+          }
+        // }
         console.log('Load was performed.');
         });
       }, 1000);
     });
   </script>
+
 
 </html>
 
