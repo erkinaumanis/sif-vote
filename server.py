@@ -50,22 +50,22 @@ def recieve():
         number = request.values.get("From")
 
         # number exists
-        if number in numbers:
-            client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
-        else:
-            body = request.values.get('Body').lower()            
-            ticker = body.rsplit(" ", 1)[1]
-            vote = body.rsplit(" ", 1)[0]
-            valid = False
-            for s in stocks:
-                if s["decision"].lower() == vote and s["ticker"].lower() == ticker:
-                    s["votes"] += 1
-                    numbers.add(number)
-                    valid = True
-                    client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
-                    break
-            if valid == False:
-                client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
+        # if number in numbers:
+        #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
+        # else:
+        body = request.values.get('Body').lower()            
+        ticker = body.rsplit(" ", 1)[1]
+        vote = body.rsplit(" ", 1)[0]
+        valid = False
+        for s in stocks:
+            if s["decision"].lower() == vote and s["ticker"].lower() == ticker:
+                s["votes"] += 1
+                numbers.add(number)
+                valid = True
+                client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
+                break
+        if valid == False:
+            client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
     return jsonify(request.form)
 
 def _filter_unique(stocks, stock_id):

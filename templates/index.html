@@ -32,16 +32,32 @@
     $(document).ready(function() {
       setInterval(function() {
         $.get("/list", function(data) {
-            var num1 = $(location).attr('href').split("/").pop();
-            var num2 = $(location).attr('href').split("/").pop() + 1;
+
+            var num1 = 0
+            var num2 = 1
+            var num3 = 2
+            var num4 = 3
             // console.log(data.stocks[i]);
             var stock1 = data.stocks[num1];
             var stock2 = data.stocks[num2];
-            $("#stock" + num1 + " .votes").html(stock1.votes);
-            $("#stock" + num1 + " .bar").css("width",stock1.votes*10);
-            $("#stock" + num2 + " .votes").html(stock2.votes);
-            $("#stock" + num2 + " .bar").css("width",stock2.votes*10);
-          }
+            var stock3 = data.stocks[num3];
+            var stock4 = data.stocks[num4];
+
+            if ($(location).attr('href').split("/").pop() == "0") {
+              $("#stock" + num1 + " .votes").html(stock1.votes);
+              $("#stock" + num1 + " .bar").css("width",stock1.votes*10);
+              $("#stock" + num2 + " .votes").html(stock2.votes);
+              $("#stock" + num2 + " .bar").css("width",stock2.votes*10);
+            }
+          
+            if ($(location).attr('href').split("/").pop() == "2") {
+              $("#stock" + num3 + " .votes").html(stock3.votes);
+              $("#stock" + num3 + " .bar").css("width",stock3.votes*10);
+              $("#stock" + num4 + " .votes").html(stock4.votes);
+              $("#stock" + num4 + " .bar").css("width",stock4.votes*10);
+            }
+            console.log($(location).attr('href').split("/").pop());
+        
         // }
         console.log('Load was performed.');
         });
