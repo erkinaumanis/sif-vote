@@ -17,10 +17,10 @@ client = TwilioRestClient(TWILIO_ID, TWILIO_TOKEN)
 
 numbers = set()
 stocks = [
-{"id": 0, "ticker": "TTWO", "name": "Take Two Inc.", "action": "Buy", "amount": "$15,000", "status": "Active", "date": "11/5", "decision": "Buy", "votes": 1, "result": None},
-{"id": 1, "ticker": "TTWO", "name": "Take Two Inc.", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "11/5", "decision": "Don't Buy", "votes": 2, "result": None},
-{"id": 2, "ticker": "PBPB", "name": "Potbelly Corp.", "action": "Buy", "amount": "$20,000", "status": "Active", "date": "11/5", "decision": "Buy", "votes": 3, "result": None},
-{"id": 3, "ticker": "PBPB", "name": "Potbelly Corp.", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "11/5", "decision": "Don't Buy", "votes": 4, "result": None},
+{"id": 0, "ticker": "TTWO", "name": "Take Two Inc.", "action": "Buy", "amount": "$15,000", "status": "Active", "date": "11/5", "decision": "Buy", "votes": 0, "result": None},
+{"id": 1, "ticker": "TTWO", "name": "Take Two Inc.", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "11/5", "decision": "Don't Buy", "votes": 0, "result": None},
+{"id": 2, "ticker": "PBPB", "name": "Potbelly Corp.", "action": "Buy", "amount": "$20,000", "status": "Active", "date": "11/5", "decision": "Buy", "votes": 0, "result": None},
+{"id": 3, "ticker": "PBPB", "name": "Potbelly Corp.", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "11/5", "decision": "Don't Buy", "votes": 0, "result": None},
 {"id": 4, "ticker": "CAT", "name": "Caterpillar", "action": "Buy", "amount": "$10,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 0, "result": None},
 {"id": 5, "ticker": "CAT", "name": "Caterpillar", "action": "Don't Buy", "amount": "N/A", "status": "Active", "date": "10/29", "decision": "Don't Buy", "votes": 0, "result": None},
 {"id": 6, "ticker": "PM", "name": "Phillip Morris", "action": "Buy", "amount": "$15,000", "status": "Active", "date": "10/29", "decision": "Buy", "votes": 0, "result": None},
