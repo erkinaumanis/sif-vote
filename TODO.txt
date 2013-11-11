@@ -1,0 +1,9 @@
+latest vote page --> scraped import.io (use php)
+
+update graph with html elements
+
+html elements get updated from api calls
+
+same stylesheet
+
+change to choice + TICKER
