@@ -15,8 +15,8 @@ app = Flask(__name__)
 app.debug = True
 
 # db init
-app.config["MONGODB_DB"] = 'sif-vote-db' 
-connect('claremont-sms-db', host='mongodb://' + 'evan' + ':' + tokens.DB_PASSWORD + '@' + tokens.DB_HOST_ADDRESS)
+app.config["MONGODB_DB"] = 'sif-vote'
+connect('sif-vote', host='mongodb://' + tokens.DB_USER + ':' + tokens.DB_PASSWORD + '@' + tokens.DB_HOST_ADDRESS)
 
 db = MongoEngine(app)
 
