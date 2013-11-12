@@ -34,3 +34,6 @@ nosetests.xml
 .project
 .pydevproject
 
+# Security
+tokens.py
+
