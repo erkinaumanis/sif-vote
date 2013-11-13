@@ -36,39 +36,23 @@
   <script type='text/javascript'>
     $(document).ready(function() {
       setInterval(function() {
-        $.get("/list", function(votes) {
-            console.log(votes);
+        $.get("/list", function(body) {
 
-            // for (var i = 0; i++; i < stocks.length) {
+          console.log(body['votes1'] * 10);
+          console.log(body['ticker1']);
+        // if ($(location).attr('href').split("/").pop() == "0") {
+          $("#stock" + body['ticker1'] + " .votes").html(body['votes1']);
+          $("#stock" + body['ticker1'] + " .bar").css("width",body['votes1']*10);
 
-            //   console.log(stocks[i]);
+          $("#stock" + body['ticker2'] + " .votes").html(body['votes2']);
+          $("#stock" + body['ticker2'] + " .bar").css("width",body['votes2']*10);
 
-              // var num1 = 'TTT'
-              // var num2 = 1
-              // var num3 = 2
-              // var num4 = 3
-              // // console.log(data.stocks[i]);
-              // var stock1 = data.stocks[num1];
-              // var stock2 = data.stocks[num2];
-              // var stock3 = data.stocks[num3];
-              // var stock4 = data.stocks[num4];
+          $("#stock" + body['ticker3'] + " .votes").html(body['votes3']);
+          $("#stock" + body['ticker3'] + " .bar").css("width",body['votes3']*10);
 
-              // if ($(location).attr('href').split("/").pop() == "0") {
-              //   $("#stock" + num1 + " .votes").html(stock1.vote_count);
-              //   $("#stock" + num1 + " .bar").css("width",stock1.vote_count*10);
-              //   $("#stock" + num2 + " .votes").html(stock2.vote_count);
-              //   $("#stock" + num2 + " .bar").css("width",stock2.vote_count*10);
-              // }
+          $("#stock" + body['ticker4'] + " .votes").html(body['votes4']);
+          $("#stock" + body['ticker4'] + " .bar").css("width",body['votes4']*10);
             
-              // if ($(location).attr('href').split("/").pop() == "2") {
-              //   $("#stock" + num3 + " .votes").html(stock3.vote_count);
-              //   $("#stock" + num3 + " .bar").css("width",stock3.vote_count*10);
-              //   $("#stock" + num4 + " .votes").html(stock4.vote_count);
-              //   $("#stock" + num4 + " .bar").css("width",stock4.vote_count*10);
-              // }
-              // console.log($(location).attr('href').split("/").pop());
-        
-            // }
         console.log('Load was performed.');
         });
       }, 1000);
