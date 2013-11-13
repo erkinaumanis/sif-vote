@@ -10,8 +10,8 @@ class Pitch(db.DynamicDocument):
 
     # TODO: add in other field params
     pitch_date = db.StringField()
-    is_active = db.BooleanField(default=True)
-    name = db.StringField(max_length=25)
+    status = db.StringField(max_length=10)
+    name = db.StringField(max_length=25, default="active")
     ticker = db.StringField(max_length=5)
     created_at = db.DateTimeField(default=datetime.now()) 
 
@@ -67,8 +67,10 @@ def vote_on_action(ticker, symbol, number):
     # increments count and adds number to vote
     
     pitch_actions = list(Action.objects(ticker = ticker))
-    action = [a for a in pitch_actions if a.symbol == symbol]
-    votes = action[0].vote_count + 1
-    action[0].update(set__vote_count = votes)
+
+    if pitch_actions is not None:
+        action = [a for a in pitch_actions if a.symbol == symbol]
+        votes = action[0].vote_count + 1
+        action[0].update(set__vote_count = votes)
     # numbers = action[0].numbers
     # action.update(set__numbers = action.numbers)
