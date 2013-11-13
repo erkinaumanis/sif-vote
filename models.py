@@ -10,8 +10,8 @@ class Pitch(db.DynamicDocument):
 
     # TODO: add in other field params
     pitch_date = db.StringField()
-    status = db.StringField(max_length=10)
-    name = db.StringField(max_length=25, default="active")
+    status = db.StringField(max_length=10, default="active")
+    name = db.StringField(max_length=25)
     ticker = db.StringField(max_length=5)
     created_at = db.DateTimeField(default=datetime.now()) 
 

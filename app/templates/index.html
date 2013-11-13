@@ -37,21 +37,22 @@
     $(document).ready(function() {
       setInterval(function() {
         $.get("/list", function(body) {
+          // TODO: This code sucks.... fix it
 
           console.log(body['votes1'] * 10);
-          console.log(body['ticker1']);
-        // if ($(location).attr('href').split("/").pop() == "0") {
-          $("#stock" + body['ticker1'] + " .votes").html(body['votes1']);
-          $("#stock" + body['ticker1'] + " .bar").css("width",body['votes1']*10);
+          console.log(body);
 
-          $("#stock" + body['ticker2'] + " .votes").html(body['votes2']);
-          $("#stock" + body['ticker2'] + " .bar").css("width",body['votes2']*10);
+          // $("#stock" + body['ticker1'] + body['symbol1'] + " .votes").html(body['votes1']);
+          // $("#stock" + body['ticker1'] + body['symbol1'] + " .bar").css("width",body['votes1']*10);
 
-          $("#stock" + body['ticker3'] + " .votes").html(body['votes3']);
-          $("#stock" + body['ticker3'] + " .bar").css("width",body['votes3']*10);
+          // $("#stock" + body['ticker2'] + body['symbol2'] + " .votes").html(body['votes2']);
+          // $("#stock" + body['ticker2'] + body['symbol2'] + " .bar").css("width",body['votes2']*10);
 
-          $("#stock" + body['ticker4'] + " .votes").html(body['votes4']);
-          $("#stock" + body['ticker4'] + " .bar").css("width",body['votes4']*10);
+          // $("#stock" + body['ticker3'] + body['symbol3'] + " .votes").html(body['votes3']);
+          // $("#stock" + body['ticker3'] + body['symbol3'] + " .bar").css("width",body['votes3']*10);
+
+          // $("#stock" + body['ticker4'] + body['symbol4'] + " .votes").html(body['votes4']);
+          // $("#stock" + body['ticker4'] + body['symbol4'] + " .bar").css("width",body['votes4']*10);
             
         console.log('Load was performed.');
         });

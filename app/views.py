@@ -41,14 +41,19 @@ def create():
 @app.route('/list', methods=['GET'])
 def get_pitch():
     # TODO: Make this return all stocks for a given pitch
+    # TODO: This code sucks.... fix it
     votes1 = get_all_actions()[0].vote_count
     ticker1 = get_all_actions()[0].ticker
+    symbol1 = get_all_actions()[0].vote_symbol
     votes2 = get_all_actions()[1].vote_count
     ticker2 = get_all_actions()[1].ticker
+    symbol2 = get_all_actions()[1].vote_symbol
     votes3 = get_all_actions()[2].vote_count
     ticker3 = get_all_actions()[2].ticker
+    symbol3 = get_all_actions()[2].vote_symbol
     votes4 = get_all_actions()[3].vote_count
     ticker4 = get_all_actions()[3].ticker
+    symbol4 = get_all_actions()[3].vote_symbol
 
     return jsonify({"votes1": votes1,
                     "votes2": votes2,
@@ -57,7 +62,11 @@ def get_pitch():
                     "ticker1":ticker1,
                     "ticker2":ticker2,
                     "ticker3":ticker3,
-                    "ticker4":ticker4 })
+                    "ticker4":ticker4,
+                    "symbol1":symbol1,
+                    "symbol2":symbol2,
+                    "symbol3":symbol3,
+                    "symbol4":symbol4 })
 
 @app.route('/vote/<string:ticker>', methods=['GET'])
 def vote(ticker):
