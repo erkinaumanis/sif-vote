@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify
 from wtforms import Form, BooleanField, TextField, validators, ValidationError
-from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, get_all_pitches
+from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, get_all_pitches, vote_on_action
 # from lib import forms, process
 from app import app
 import pdb
