@@ -6,8 +6,6 @@ from flask import Flask
 from mongoengine import connect
 from flask.ext.mongoengine import MongoEngine
 from lib import tokens
-import twilio.twiml
-from twilio.rest import TwilioRestClient
 
 # init
 app = Flask(__name__)
@@ -23,4 +21,3 @@ db = MongoEngine(app)
 from views import *
 
 # twilio init
-client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)

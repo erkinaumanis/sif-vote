@@ -4,7 +4,13 @@ from wtforms import Form, BooleanField, TextField, validators, ValidationError
 from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, get_all_pitches, vote_on_action
 # from lib import forms, process
 from app import app
+import twilio.twiml
+from twilio.rest import TwilioRestClient
+from lib import tokens
 import pdb
+
+client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
+
 
 @app.route('/', methods=['GET'])
 def index():
@@ -51,7 +57,8 @@ def vote(ticker):
 @app.route('/recieve', methods=['POST'])
 def recieve():
     if request.method == "POST":
-        number = request.values.get("From")
+
+        number = request.values.get('From')
 
         # number exists
         # if number in numbers:
@@ -64,7 +71,7 @@ def recieve():
         valid = False
 
         vote_on_action(ticker, symbol, number)
-        client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
+        client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
 
 
         #     if s["decision"].lower() == vote and s["ticker"].lower() == ticker:

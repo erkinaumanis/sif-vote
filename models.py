@@ -68,7 +68,7 @@ def vote_on_action(ticker, symbol, number):
     
     pitch_actions = list(Action.objects(ticker = ticker))
     action = [a for a in pitch_actions if a.symbol == symbol]
-    votes = action.vote_count + 1
-    action.update(set__vote_count = votes)
-    numbers = actions.numbers
-    action.update(set__numbers = action.numbers)
+    votes = action[0].vote_count + 1
+    action[0].update(set__vote_count = votes)
+    # numbers = action[0].numbers
+    # action.update(set__numbers = action.numbers)
