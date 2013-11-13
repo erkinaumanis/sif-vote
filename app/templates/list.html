@@ -17,9 +17,9 @@
       <td class="name"> {{stock.name}} </td>
       <td class="span1"> {{stock.ticker}}</td>
       <td class="status"> {{stock.status}} </td>
-      <td class="date"> {{stock.date}} </td>
+      <td class="date"> {{stock.pitch_date}} </td>
       <td class="result">         
-        <a href="/vote/{{stock.id}}">View Result</a>
+        <a href="/vote/{{stock.ticker}}">View Result</a>
       </td>
     </tr>
   {% endfor %}

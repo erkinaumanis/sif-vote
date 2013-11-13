@@ -8,11 +8,16 @@
   </head>
 
   <body>
+
+    <div class="add-pitch">
+      <a href="/new">Add a new pitch</a>
+    </div>
     
     <div class="container">
       <div class="header">
         <h1>CMC Student Investment Fund Voting </h1>
-        <h3>Directions: Text "Buy ____" or "Don't Buy ____" to (303) 816-3058 </h3>
+        <h3>Directions: Text "&#60Choice&#62 &#60Ticker&#62" to (303) 816-3058 </h3>
+        <h4>For example: "A CMCSA" </h4>
       </div>
       
       <div class="results span10 well offset1">
@@ -31,34 +36,39 @@
   <script type='text/javascript'>
     $(document).ready(function() {
       setInterval(function() {
-        $.get("/list", function(data) {
+        $.get("/list", function(votes) {
+            console.log(votes);
 
-            var num1 = 0
-            var num2 = 1
-            var num3 = 2
-            var num4 = 3
-            // console.log(data.stocks[i]);
-            var stock1 = data.stocks[num1];
-            var stock2 = data.stocks[num2];
-            var stock3 = data.stocks[num3];
-            var stock4 = data.stocks[num4];
+            // for (var i = 0; i++; i < stocks.length) {
 
-            if ($(location).attr('href').split("/").pop() == "0") {
-              $("#stock" + num1 + " .votes").html(stock1.votes);
-              $("#stock" + num1 + " .bar").css("width",stock1.votes*10);
-              $("#stock" + num2 + " .votes").html(stock2.votes);
-              $("#stock" + num2 + " .bar").css("width",stock2.votes*10);
-            }
-          
-            if ($(location).attr('href').split("/").pop() == "2") {
-              $("#stock" + num3 + " .votes").html(stock3.votes);
-              $("#stock" + num3 + " .bar").css("width",stock3.votes*10);
-              $("#stock" + num4 + " .votes").html(stock4.votes);
-              $("#stock" + num4 + " .bar").css("width",stock4.votes*10);
-            }
-            console.log($(location).attr('href').split("/").pop());
+            //   console.log(stocks[i]);
+
+              // var num1 = 'TTT'
+              // var num2 = 1
+              // var num3 = 2
+              // var num4 = 3
+              // // console.log(data.stocks[i]);
+              // var stock1 = data.stocks[num1];
+              // var stock2 = data.stocks[num2];
+              // var stock3 = data.stocks[num3];
+              // var stock4 = data.stocks[num4];
+
+              // if ($(location).attr('href').split("/").pop() == "0") {
+              //   $("#stock" + num1 + " .votes").html(stock1.vote_count);
+              //   $("#stock" + num1 + " .bar").css("width",stock1.vote_count*10);
+              //   $("#stock" + num2 + " .votes").html(stock2.vote_count);
+              //   $("#stock" + num2 + " .bar").css("width",stock2.vote_count*10);
+              // }
+            
+              // if ($(location).attr('href').split("/").pop() == "2") {
+              //   $("#stock" + num3 + " .votes").html(stock3.vote_count);
+              //   $("#stock" + num3 + " .bar").css("width",stock3.vote_count*10);
+              //   $("#stock" + num4 + " .votes").html(stock4.vote_count);
+              //   $("#stock" + num4 + " .bar").css("width",stock4.vote_count*10);
+              // }
+              // console.log($(location).attr('href').split("/").pop());
         
-        // }
+            // }
         console.log('Load was performed.');
         });
       }, 1000);

@@ -5,7 +5,8 @@
 <table class="table">
   <thead>
     <tr>
-      <th class="span2">Stock Name</th>
+      <th class="span1">Choice</th>
+      <th class="span1">Stock Name</th>
       <th class="span1">Ticker</th>
       <th class="span2">Action</th>
       <th class="span2">Amount</th>
@@ -17,19 +18,20 @@
   <tbody>
     {% for stock in stocks %}      
       <tr id="stock{{stock.id}}" >
+        <td class="span1"> {{stock.symbol}}</td>
         <td class="span2"> {{stock.name}}</td>
         <td class="span1"> {{stock.ticker}}</td>
         <td class="span2"> {{stock.action}} </td>
-        <td class="span2"> {{stock.amount}} </td>
+        <td class="span2"> ${{stock.amount}} </td>
         <td class="span5">
           <div class="progress progress-{{["info","success", "alert", "warning"][loop.index0]}}">
               <div class="bar"
-                   style="width: {{stock.votes * 10}};"></div>
+                   style="width: {{stock.vote_count * 10}};"></div>
           </div>
         </td>
         <td class="span1">
             <div class="votes">
-                {{stock.votes}} 
+                {{stock.vote_count}} 
             </div>
         </td>
       </tr>
