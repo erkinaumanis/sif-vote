@@ -37,6 +37,13 @@
 	/*padding:;*/
 }
 
+.list {
+	margin-left: 10px;
+	margin-top: 20px;
+	width: 1225px;
+	float: left;
+	/*padding:;*/
+}
 .activity {
 	margin-left: 20px;
 	margin-top: 20px;
