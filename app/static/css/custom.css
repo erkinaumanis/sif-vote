@@ -46,7 +46,9 @@
 
 .well {
 	border: none;
+	-webkit-box-shadow: none;
 }
+
 .activity {
 	margin-left: 20px;
 	margin-top: 20px;

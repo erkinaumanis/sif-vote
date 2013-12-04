@@ -1,15 +1,13 @@
 update latest vote page --> scraped import.io (use php)
 
-recent activity
-
 symbol --> code???
 
 toggle active/inactive
 
 vote limit, better parsing
 
-add vote and all votes styling
+fix view results
 
 about page
 
-datetime UTC now?????
+datetime UTC now + recent activity expiration
