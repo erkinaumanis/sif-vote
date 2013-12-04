@@ -39,8 +39,8 @@ $(document).ready(function() {
   setInterval(function() {
     $.get("/update_numbers", function(body) {
       var templ = ""
-      for (var number in body) {
-        templ = templ + "<div>" + number + "</div>";
+      for (var key in body) {
+        templ = templ + "<div>" + body[key] + "</div>";
       }
       
       $('.number-list').html(templ);

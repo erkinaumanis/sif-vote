@@ -110,10 +110,10 @@ def update_votes():
 # Returns json to update recent vote numbers
 @app.route('/update_numbers', methods=['GET'])
 def update_numbers():
-    rv = get_recent_numbers()
-    rv_dict = {}
-    for n in rv:
-        rv_dict[n] = {}
+    rv = get_recent_numbers()    
+    rv_dict = {}    
+    for i,n in enumerate(rv):
+        rv_dict[i] = n
     return jsonify(rv_dict)
 
 
