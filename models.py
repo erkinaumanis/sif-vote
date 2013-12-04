@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from app import db
 from random import randint
 import pdb
@@ -36,6 +36,7 @@ class Vote(db.DynamicDocument):
     number = db.IntField()
     symbol = db.StringField(max_length=5)
     ticker = db.StringField(max_length=40)
+    created_at = db.DateTimeField(default=datetime.now())
     
 
 #---------------------------------------------
@@ -96,3 +97,7 @@ def get_active_pitches():
     active_pitches = [p for p in all_pitches if p.status == 'active']
     return [(p,get_pitch_actions(p.ticker)) for p in active_pitches]
 
+def get_recent_numbers():
+    all_votes = list(Vote.objects())
+    recent_votes = [v for v in all_votes if (v.created_at - datetime.utcnow()) < timedelta(hours=24)]
+    return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]

@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify
 from wtforms import Form, BooleanField, TextField, validators, ValidationError
-from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, get_all_pitches, vote_on_action, get_active_pitches
+from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, \
+                    get_recent_numbers, get_all_pitches, vote_on_action, get_active_pitches
 from app import app
 import twilio.twiml
 from twilio.rest import TwilioRestClient
@@ -13,7 +14,7 @@ client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
 # Renders page for dashboard and current pitches
 @app.route('/', methods=['GET'])
 def index():
-    active_pitches = get_active_pitches()
+    active_pitches = get_active_pitches()  
     return render_template('dashboard.html', stocks=active_pitches)
 
 # Renders page for latest pitch, basically a copy of current
@@ -33,6 +34,10 @@ def new():
 def create():
     if request.method == "POST":
         data = request.form
+
+        # take out $ sign in 
+        data['amount-1'].replace('$',"")
+        data['amount-2'].replace('$',"")
 
         # add new pitches and actions to mongo
         create_pitch(data['pitch-name'], data['ticker'], data['pitch-date'])
@@ -91,8 +96,8 @@ def recieve():
     return jsonify(request.form)
 
 # Returns json to update graphs
-@app.route('/update', methods=['GET'])
-def update():
+@app.route('/update_votes', methods=['GET'])
+def update_votes():
     ap = get_active_pitches()
     ap_dict = {}
     for p in ap:
@@ -101,6 +106,15 @@ def update():
             a_dict[a.action_id] = a.vote_count
         ap_dict[p[0].ticker] = a_dict
     return jsonify(ap_dict)
+
+# Returns json to update recent vote numbers
+@app.route('/update_numbers', methods=['GET'])
+def update_numbers():
+    rv = get_recent_numbers()
+    rv_dict = {}
+    for n in rv:
+        rv_dict[n] = {}
+    return jsonify(rv_dict)
 
 
 def _filter_unique(stocks, stock_id):

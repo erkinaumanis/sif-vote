@@ -12,6 +12,11 @@
 	text-align: left;
 }
 
+.create {
+	margin-left: 45px;
+	width: 1390px;
+}
+
 .header {
 	margin-top: 50px;	
 }
@@ -70,6 +75,12 @@
 }
 
 .results .count {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.results .symbol {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;

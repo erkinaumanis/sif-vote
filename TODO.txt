@@ -1,9 +1,15 @@
-latest vote page --> scraped import.io (use php)
+update latest vote page --> scraped import.io (use php)
 
-update graph with html elements
+recent activity
 
-html elements get updated from api calls
+symbol --> code???
 
-same stylesheet
+toggle active/inactive
 
-change to choice + TICKER
+vote limit, better parsing
+
+add vote and all votes styling
+
+about page
+
+datetime UTC now?????
