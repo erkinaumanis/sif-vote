@@ -52,8 +52,9 @@
 .activity {
 	margin-left: 20px;
 	margin-top: 20px;
-	width: 515px;
+	width: 32%;
 	float: left;
+	position: relative;
 }
 
 .dropdown-header {
