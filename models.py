@@ -13,7 +13,7 @@ class Pitch(db.DynamicDocument):
     # TODO: add in other field params
     pitch_date = db.StringField()
     status = db.StringField(max_length=10, default="active")
-    name = db.StringField(max_length=25)
+    name = db.StringField(max_length=40)
     ticker = db.StringField(max_length=5)
     created_at = db.DateTimeField(default=datetime.now()) 
 
@@ -30,19 +30,18 @@ class Action(db.DynamicDocument):
     action_id = db.IntField()
     created_at = db.DateTimeField(default=datetime.now())
 
-# class Vote(db.DynamicDocument):
-#     ''' class to store vote data '''
+class Vote(db.DynamicDocument):
+    ''' class to store vote data '''
 
-#     number = db.IntField()
-#     ticker = db.StringField(max_length=5)
-#     action = 
+    number = db.IntField()
+    symbol = db.StringField(max_length=5)
+    ticker = db.StringField(max_length=40)
     
 
 #---------------------------------------------
 # model layer actions
 # --------------------------------------------
 
-# TODO: add more model layer actions
 def create_pitch(name, ticker, date):
     new_pitch = Pitch()
     new_pitch.name = name
@@ -52,7 +51,6 @@ def create_pitch(name, ticker, date):
     new_pitch.save()
 
 def create_action(symbol, name, action, amount, ticker):
-    # TODO: ADD ATOMIC INCREMENT
     new_action = Action()
     new_action.symbol = symbol
     new_action.name = name
@@ -61,6 +59,13 @@ def create_action(symbol, name, action, amount, ticker):
     new_action.ticker = ticker
     new_action.action_id = randint(0,1000)
     new_action.save()
+
+def create_vote(number, symbol, ticker):
+    new_vote = Vote()
+    new_vote.number = number
+    new_vote.symbol = symbol
+    new_vote.ticker = ticker
+    new_vote.save()
 
 def get_all_pitches():
     return list(Pitch.objects())
@@ -77,12 +82,14 @@ def vote_on_action(ticker, symbol, number):
     
     pitch_actions = list(Action.objects(ticker = ticker))
 
+    # update action class
     if pitch_actions is not None:
         action = [a for a in pitch_actions if a.symbol == symbol]
         votes = action[0].vote_count + 1
         action[0].update(set__vote_count = votes)
-    # numbers = action[0].numbers
-    # action.update(set__numbers = action.numbers)
+
+    # update vote class
+    create_vote(number,symbol,ticker)
 
 def get_active_pitches():
     all_pitches = list(Pitch.objects())
