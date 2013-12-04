@@ -32,9 +32,9 @@
 .results {
 	margin-left: 15px;
 	margin-top: 20px;
-	width: 700px;
+	width: 65%;
 	float: left;
-	/*padding:;*/
+	position: relative;
 }
 
 .list {
