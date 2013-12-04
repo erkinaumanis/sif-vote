@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h1>Dashboard <small> Current Votes </small> </h1> </li>
+          <ol class="breadcrumb">
+            <li><a href="index.html"><i class="icon-dashboard"></i> Dashboard</a>
+            <li class="active"><i class="icon-file-alt"></i> Current Votes</li>              
+          </ol>
+        </div>
+      </div><!-- /.row -->
+
+
+      <div class="row">
+        <div class="results span6 well offset1">
+            <h2> Results </h2>
+              {% for stock in stocks %}
+                <table class="table {{stock[0].ticker}}">
+
+                  <thead>
+                    <tr>
+                      <th class="result-symbol">Symbol</th>
+                      <th class="result-name">{{stock[0].ticker}}</th>
+                      <th class="result-amount">Amount</th>
+                      <th class="result-votes">Votes</th>
+                      <th class="span1">Count</th>
+                    </tr>
+                  </thead>
+
+                {% for action in stock[1] %}
+                  <tr class="result-action" id="{{action.action_id}}" >
+                    <th class="symbol">{{action.symbol}}</th>
+                    <td class="header"> {{action.action}} </td>
+                    <td class="amount"> ${{action.amount}} </td>
+                    </td>
+                    <td class="votes">
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{action.vote_count * 10}}%">
+                        </div>
+                      </div>
+                    </td>
+                    <td class="count">
+                      {{action.vote_count}}
+                    </td>
+                  </tr>
+                {% endfor %}
+
+                </table>
+              {% endfor %}
+        </div>
+
+        <div class="activity span4 well offset1">
+            <h2> Activity </h2>
+            <table class="table">
+        
+            </table>
+        </div>
+
+    </div><!-- /#page-wrapper -->
+
+{% endblock %}

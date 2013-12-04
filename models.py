@@ -1,5 +1,7 @@
 from datetime import datetime
 from app import db
+from random import randint
+import pdb
 
 #---------------------------------------------
 # model class schema
@@ -17,8 +19,7 @@ class Pitch(db.DynamicDocument):
 
 class Action(db.DynamicDocument):
     ''' class to hold the different possible actions of a pitch '''
-
-    # TODO: add in other field params
+    
     name = db.StringField(max_length=25)
     vote_count = db.IntField(default = 0)
     vote_numbers = db.ListField()
@@ -28,6 +29,13 @@ class Action(db.DynamicDocument):
     amount = db.IntField()
     action_id = db.IntField()
     created_at = db.DateTimeField(default=datetime.now())
+
+# class Vote(db.DynamicDocument):
+#     ''' class to store vote data '''
+
+#     number = db.IntField()
+#     ticker = db.StringField(max_length=5)
+#     action = 
     
 
 #---------------------------------------------
@@ -51,6 +59,7 @@ def create_action(symbol, name, action, amount, ticker):
     new_action.action = action
     new_action.amount = amount
     new_action.ticker = ticker
+    new_action.action_id = randint(0,1000)
     new_action.save()
 
 def get_all_pitches():
@@ -74,3 +83,9 @@ def vote_on_action(ticker, symbol, number):
         action[0].update(set__vote_count = votes)
     # numbers = action[0].numbers
     # action.update(set__numbers = action.numbers)
+
+def get_active_pitches():
+    all_pitches = list(Pitch.objects())
+    active_pitches = [p for p in all_pitches if p.status == 'active']
+    return [(p,get_pitch_actions(p.ticker)) for p in active_pitches]
+

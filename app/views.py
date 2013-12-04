@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify
 from wtforms import Form, BooleanField, TextField, validators, ValidationError
-from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, get_all_pitches, vote_on_action
-# from lib import forms, process
+from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, get_all_pitches, vote_on_action, get_active_pitches
 from app import app
 import twilio.twiml
 from twilio.rest import TwilioRestClient
@@ -11,13 +10,20 @@ import pdb
 
 client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
 
-
+# Renders page for dashboard and current pitches
 @app.route('/', methods=['GET'])
 def index():
-    pitches = get_all_pitches()
-    return render_template('list.html', stocks=pitches)
+    active_pitches = get_active_pitches()
+    return render_template('dashboard.html', stocks=active_pitches)
 
-# Renders page for new pitches
+# Renders page for latest pitch, basically a copy of current
+@app.route('/latest', methods=['GET'])
+def latest():
+    # TODO: change to current pitches
+    pitches = get_all_pitches()
+    return render_template('latest.html', stocks=pitches)
+
+# Renders form for new pitches
 @app.route('/new', methods=['GET'])
 def new():
     return render_template('new.html')
@@ -37,37 +43,13 @@ def create():
         
         return render_template('list.html', stocks=pitches)
 
+# Renders page to view all pitches
+@app.route('/all', methods=['GET'])
+def all():
+    pitches = get_all_pitches()
+    return render_template('list.html', stocks=pitches)
 
-@app.route('/list', methods=['GET'])
-def get_pitch():
-    # TODO: Make this return all stocks for a given pitch
-    # TODO: This code sucks.... fix it
-    votes1 = get_all_actions()[0].vote_count
-    ticker1 = get_all_actions()[0].ticker
-    symbol1 = get_all_actions()[0].vote_symbol
-    votes2 = get_all_actions()[1].vote_count
-    ticker2 = get_all_actions()[1].ticker
-    symbol2 = get_all_actions()[1].vote_symbol
-    votes3 = get_all_actions()[2].vote_count
-    ticker3 = get_all_actions()[2].ticker
-    symbol3 = get_all_actions()[2].vote_symbol
-    votes4 = get_all_actions()[3].vote_count
-    ticker4 = get_all_actions()[3].ticker
-    symbol4 = get_all_actions()[3].vote_symbol
-
-    return jsonify({"votes1": votes1,
-                    "votes2": votes2,
-                    "votes3": votes3,
-                    "votes4": votes4,
-                    "ticker1":ticker1,
-                    "ticker2":ticker2,
-                    "ticker3":ticker3,
-                    "ticker4":ticker4,
-                    "symbol1":symbol1,
-                    "symbol2":symbol2,
-                    "symbol3":symbol3,
-                    "symbol4":symbol4 })
-
+# Renders page for an individual vote result from all votes
 @app.route('/vote/<string:ticker>', methods=['GET'])
 def vote(ticker):
     # TODO: Make this return all stocks for a given pitch
@@ -75,6 +57,7 @@ def vote(ticker):
     vote_stocks = get_pitch_actions(ticker)
     return render_template('display.html', stocks=vote_stocks)
 
+# Route to receive texts from twilio
 @app.route('/recieve', methods=['POST'])
 def recieve():
     if request.method == "POST":
@@ -106,6 +89,19 @@ def recieve():
         # if valid == False:
         #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
     return jsonify(request.form)
+
+# Returns json to update graphs
+@app.route('/update', methods=['GET'])
+def update():
+    ap = get_active_pitches()
+    ap_dict = {}
+    for p in ap:
+        a_dict = {}
+        for a in p[1]:
+            a_dict[a.action_id] = a.vote_count
+        ap_dict[p[0].ticker] = a_dict
+    return jsonify(ap_dict)
+
 
 def _filter_unique(stocks, stock_id):
     vote_stocks = []

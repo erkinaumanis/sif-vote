@@ -13,10 +13,64 @@
 }
 
 .header {
-	margin-top: 50px;
+	margin-top: 50px;	
+}
+
+.results h2 {
+	margin-top: auto;
+}
+
+.activity h2 {
+	margin-top: auto;
 }
 
 .results {
+	margin-left: 20px;
 	margin-top: 20px;
+	width: 800px;
+	float: left;
+	/*padding:;*/
 }
 
+.activity {
+	margin-left: 20px;
+	margin-top: 20px;
+	width: 495px;
+	float: left;
+}
+
+.dropdown-header {
+	font-size: 18px;
+	margin-top: 10px;	
+}
+
+.result-action {
+	height: 50px;
+}
+
+.result-name {
+	width: 100px;
+}
+
+.result-amount {
+	width: 100px;
+}
+
+.results .progress {
+	height: 25px;
+	margin-bottom: 0;
+}
+
+.result-votes {
+	width: 450px;
+}
+
+.result-symbol {
+	width: 100px;
+}
+
+.results .count {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}

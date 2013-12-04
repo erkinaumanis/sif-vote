@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+  <thead>
+    <tr>
+      <th class="span2">Company Name</th>
+      <th class="span1">Ticker</th>
+      <th class="span2">Status</th>
+      <th class="span2">Date</th>
+      <th class="span2">Outcome</th>
+    </tr>
+  </thead>
+
+  {% for stock in stocks %}
+    <tr id="stock{{loop.index0}}" >
+      <td class="name"> {{stock.name}} </td>
+      <td class="span1"> {{stock.ticker}}</td>
+      <td class="status"> {{stock.status}} </td>
+      <td class="date"> {{stock.pitch_date}} </td>
+      <td class="result">         
+        <a href="/vote/{{stock.ticker}}">View Result</a>
+      </td>
+    </tr>
+  {% endfor %}
+
+{% endblock %}

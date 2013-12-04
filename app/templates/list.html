@@ -2,26 +2,46 @@
 
 {% block content %}
 
-  <thead>
-    <tr>
-      <th class="span2">Company Name</th>
-      <th class="span1">Ticker</th>
-      <th class="span2">Status</th>
-      <th class="span2">Date</th>
-      <th class="span2">Outcome</th>
-    </tr>
-  </thead>
+<div id="page-wrapper">
 
-  {% for stock in stocks %}
-    <tr id="stock{{loop.index0}}" >
-      <td class="name"> {{stock.name}} </td>
-      <td class="span1"> {{stock.ticker}}</td>
-      <td class="status"> {{stock.status}} </td>
-      <td class="date"> {{stock.pitch_date}} </td>
-      <td class="result">         
-        <a href="/vote/{{stock.ticker}}">View Result</a>
-      </td>
-    </tr>
-  {% endfor %}
+      <div class="row">
+        <div class="col-lg-12">
+          <h1>All Votes </h1> </li>
+          <ol class="breadcrumb">
+            <li><a href="index.html"><i class="icon-dashboard"></i> All Votes</a>
+            <li class="active"><i class="icon-file-alt"></i> List</li>              
+          </ol>
+        </div>
+      </div><!-- /.row -->
+
+      <div class="results span10 well offset1">
+          <table class="table">
+
+            <thead>
+              <tr>
+                <th class="span2">Company Name</th>
+                <th class="span1">Ticker</th>
+                <th class="span2">Status</th>
+                <th class="span2">Date</th>
+                <th class="span2">Outcome</th>
+              </tr>
+            </thead>
+
+            {% for stock in stocks %}
+              <tr id="stock{{loop.index0}}" >
+                <td class="name"> {{stock.name}} </td>
+                <td class="span1"> {{stock.ticker}}</td>
+                <td class="status"> {{stock.status}} </td>
+                <td class="date"> {{stock.pitch_date}} </td>
+                <td class="result">         
+                  <a href="/vote/{{stock.ticker}}">View Result</a>
+                </td>
+              </tr>
+            {% endfor %}
+
+          </table>
+      </div>
+
+    </div><!-- /#page-wrapper -->
 
 {% endblock %}
