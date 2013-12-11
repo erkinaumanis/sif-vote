@@ -73,10 +73,9 @@ def recieve():
         # if number in numbers:
         #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
         # else:
-        # sweet
-        body = request.values.get('Body').upper()            
+        # sweet         
         ticker = "SH"
-        symbol = body
+        symbol = request.values.get('Body')
         valid = False
 
         vote_on_action(ticker, symbol, number)
