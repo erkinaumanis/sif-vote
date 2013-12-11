@@ -86,7 +86,7 @@ def vote_on_action(ticker,symbol, number):
     # update action class
     if pitch_actions is not None:
         votes = pitch_actions[0].vote_count + 1
-        action[0].update(set__vote_count = votes)
+        pitch_actions[0].update(set__vote_count = votes)
 
     # update vote class
     create_vote(number,symbol,ticker)
