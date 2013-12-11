@@ -75,7 +75,7 @@ def recieve():
         # else:
         # sweet         
         ticker = "SH"
-        symbol = request.values.get('Body')
+        symbol = str(request.values.get('Body'))
         valid = False
 
         vote_on_action(ticker, symbol, number)
