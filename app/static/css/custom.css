@@ -30,7 +30,7 @@
 }
 
 .results {
-	margin-left: 15px;
+	margin-left: 1%;
 	margin-top: 20px;
 	width: 65%;
 	float: left;
@@ -50,9 +50,9 @@
 }
 
 .activity {
-	margin-left: 20px;
+	margin-left: 1%;
 	margin-top: 20px;
-	width: 32%;
+	width: 30%;
 	float: left;
 	position: relative;
 }

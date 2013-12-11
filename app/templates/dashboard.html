@@ -20,11 +20,11 @@
             <h2> Results </h2>
               {% for stock in stocks %}
                 <table class="table {{stock[0].ticker}}">
-
+                  <h4>{{stock[0].name}}</h4>
                   <thead>
                     <tr>
                       <th class="result-symbol">Code</th>
-                      <th class="result-name">{{stock[0].ticker}}</th>
+                      <th class="result-name">Choice</th>
                       <th class="result-amount">Amount</th>
                       <th class="result-votes">Votes</th>
                       <th class="span1">Count</th>

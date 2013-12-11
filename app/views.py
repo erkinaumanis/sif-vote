@@ -14,7 +14,7 @@ client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
 # Renders page for dashboard and current pitches
 @app.route('/', methods=['GET'])
 def index():
-    active_pitches = get_active_pitches()  
+    active_pitches = get_active_pitches()      
     return render_template('dashboard.html', stocks=active_pitches)
 
 # Renders page for latest pitch, basically a copy of current

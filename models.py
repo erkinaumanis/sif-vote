@@ -78,15 +78,14 @@ def get_pitch_actions(ticker):
     # returns pitch data + actions
     return list(Action.objects(ticker = ticker))
 
-def vote_on_action(ticker, symbol, number):
+def vote_on_action(ticker,symbol, number):
     # increments count and adds number to vote
     
-    pitch_actions = list(Action.objects(ticker = ticker))
+    pitch_actions = list(Action.objects(symbol=symbol))
 
     # update action class
     if pitch_actions is not None:
-        action = [a for a in pitch_actions if a.symbol == symbol]
-        votes = action[0].vote_count + 1
+        votes = pitch_actions[0].vote_count + 1
         action[0].update(set__vote_count = votes)
 
     # update vote class
