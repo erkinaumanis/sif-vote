@@ -5,4 +5,3 @@ TWILIO_TOKEN = "d951d114074f6d3aeb672672383f8ab3"
 # TODO: add in mongo tokens
 DB_USER = "evan"
 DB_PASSWORD = "Sk8board"
-DB_HOST_ADDRESS = "ds053178.mongolab.com:53178/sif-vote"

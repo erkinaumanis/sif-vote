@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
-from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify
+from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify, Blueprint
 from wtforms import Form, BooleanField, TextField, validators, ValidationError
-from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, \
-                    get_recent_numbers, get_all_pitches, vote_on_action, get_active_pitches
+# from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, \
+#                     get_recent_numbers, get_all_pitches, vote_on_action, get_active_pitches
 from app import app
 import twilio.twiml
 from twilio.rest import TwilioRestClient
@@ -11,27 +11,32 @@ import pdb
 
 client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
 
+views = Blueprint('views',__name__)
+
 # Renders page for dashboard and current pitches
-@app.route('/', methods=['GET'])
+@views.route('/', methods=['GET'])
 def index():
-    active_pitches = get_active_pitches()      
+    from models import get_active_pitches
+    active_pitches = get_active_pitches()
     return render_template('dashboard.html', stocks=active_pitches)
 
 # Renders page for latest pitch, basically a copy of current
-@app.route('/latest', methods=['GET'])
+@views.route('/latest', methods=['GET'])
 def latest():
+    from models import get_all_pitches
     # TODO: change to current pitches
     pitches = get_all_pitches()
     return render_template('latest.html', stocks=pitches)
 
 # Renders form for new pitches
-@app.route('/new', methods=['GET'])
+@views.route('/new', methods=['GET'])
 def new():
     return render_template('new.html')
 
 # Takes in form data for new pitches
-@app.route('/create', methods=['POST'])
+@views.route('/create', methods=['POST'])
 def create():
+    from models import get_all_pitches, create_action, create_pitch
     if request.method == "POST":
         data = request.form
 
@@ -49,22 +54,25 @@ def create():
         return render_template('list.html', stocks=pitches)
 
 # Renders page to view all pitches
-@app.route('/all', methods=['GET'])
+@views.route('/all', methods=['GET'])
 def all():
+    from models import get_all_pitches
     pitches = get_all_pitches()
     return render_template('list.html', stocks=pitches)
 
 # Renders page for an individual vote result from all votes
-@app.route('/vote/<string:ticker>', methods=['GET'])
+@views.route('/vote/<string:ticker>', methods=['GET'])
 def vote(ticker):
+    from models import get_pitch_actions
     # TODO: Make this return all stocks for a given pitch
     # vote_stocks = _filter_unique(stocks, stock_id)
     vote_stocks = get_pitch_actions(ticker)
     return render_template('display.html', stocks=vote_stocks)
 
 # Route to receive texts from twilio
-@app.route('/recieve', methods=['POST'])
+@views.route('/recieve', methods=['POST'])
 def recieve():
+    from models import vote_on_action
     if request.method == "POST":
 
         number = request.values.get('From')
@@ -95,8 +103,9 @@ def recieve():
     return jsonify(request.form)
 
 # Returns json to update graphs
-@app.route('/update_votes', methods=['GET'])
+@views.route('/update_votes', methods=['GET'])
 def update_votes():
+    from models import get_active_pitches
     ap = get_active_pitches()
     ap_dict = {}
     for p in ap:
@@ -107,8 +116,9 @@ def update_votes():
     return jsonify(ap_dict)
 
 # Returns json to update recent vote numbers
-@app.route('/update_numbers', methods=['GET'])
+@views.route('/update_numbers', methods=['GET'])
 def update_numbers():
+    from models import get_recent_numbers
     rv = get_recent_numbers()    
     rv_dict = {}    
     for i,n in enumerate(rv):
