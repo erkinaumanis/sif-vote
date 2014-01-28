@@ -26,7 +26,6 @@ def start_app(config):
 def configure_app(app,config):
     app.config.from_object(config)
     app.config.from_envvar("APP_CONFIG", silent=True)
-    app.config['SERVER_NAME'] = '0.0.0.0:5000'
 
 def configure_blueprints(app):
     from views import views
