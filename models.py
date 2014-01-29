@@ -106,6 +106,9 @@ def is_number_voted(symbol,number):
     ticker = Action.objects(symbol=symbol)[0].ticker
     ticker_votes = Vote.objects(ticker=ticker)
     for votes in ticker_votes:
+        print "TESTING"
+        print votes.number
+        print number
         if votes.number == number:
             return True
     return False
