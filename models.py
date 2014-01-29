@@ -98,7 +98,7 @@ def get_active_pitches():
     return [(p,get_pitch_actions(p.ticker)) for p in active_pitches]
 
 def get_recent_numbers():
-    all_votes = list(Vote.objects())
+    all_votes = list(Vote.objects(ticker="CLD"))
     recent_votes = [v for v in all_votes if (v.created_at - datetime.utcnow()) < timedelta(hours=24)]    
     return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]
 
