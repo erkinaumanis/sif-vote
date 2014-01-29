@@ -70,7 +70,6 @@ def vote(ticker):
     vote_stocks = get_pitch_actions(ticker)
     return render_template('display.html', stocks=vote_stocks)
 
-numbers = set()
 
 # Route to receive texts from twilio
 @views.route('/recieve', methods=['POST'])
@@ -88,11 +87,9 @@ def recieve():
         else:
             symbol = str(request.json['Body'])
 
-        numbers.add(str(number))
 
         # number exists
-        # if is_number_voted(symbol,number):
-        if number in numbers:
+        if is_number_voted(symbol,number):
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
         else:
             vote_on_action(symbol, number)
