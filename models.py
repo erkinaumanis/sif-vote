@@ -78,15 +78,16 @@ def get_pitch_actions(ticker):
     # returns pitch data + actions
     return list(Action.objects(ticker = ticker))
 
-def vote_on_action(ticker,symbol, number):
+def vote_on_action(symbol, number):
     # increments count and adds number to vote
     
     pitch_actions = list(Action.objects(symbol=symbol))
+    ticker = pitch_actions[0].ticker
 
     # update action class
     if pitch_actions is not None:
         votes = pitch_actions[0].vote_count + 1
-        action[0].update(set__vote_count = votes)
+        pitch_actions[0].update(set__vote_count = votes)
 
     # update vote class
     create_vote(number,symbol,ticker)
@@ -100,3 +101,11 @@ def get_recent_numbers():
     all_votes = list(Vote.objects())
     recent_votes = [v for v in all_votes if (v.created_at - datetime.utcnow()) < timedelta(hours=24)]    
     return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]
+
+def is_number_voted(symbol,number):
+    ticker = Action.objects(symbol=symbol)[0].ticker
+    ticker_votes = Vote.objects(ticker=ticker)
+    for votes in ticker_votes:
+        if votes.number == number:
+            return True
+    return False

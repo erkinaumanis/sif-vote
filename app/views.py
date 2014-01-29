@@ -7,6 +7,7 @@ from app import app
 import twilio.twiml
 from twilio.rest import TwilioRestClient
 from lib import tokens
+import json
 import pdb
 
 client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
@@ -72,34 +73,26 @@ def vote(ticker):
 # Route to receive texts from twilio
 @views.route('/recieve', methods=['POST'])
 def recieve():
-    from models import vote_on_action
+    from models import vote_on_action, is_number_voted
     if request.method == "POST":
 
-        number = request.values.get('From')
+        if request.values.get('From'):
+            number = request.values.get('From')
+        else:
+            number = request.json['From']
+
+        if request.values.get('Body'):
+            symbol = str(request.values.get('Body'))
+        else:
+            symbol = str(request.json['Body'])
 
         # number exists
-        # if number in numbers:
-        #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
-        # else:
-        # sweet         
-        ticker = "SH"
-        symbol = str(request.values.get('Body'))
-        valid = False
-
-        vote_on_action(ticker, symbol, number)
+        if is_number_voted(symbol,number):
+            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
+     
+        vote_on_action(symbol, number)
         client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
-
-
-        #     if s["decision"].lower() == vote and s["ticker"].lower() == ticker:
-        #         s["votes"] += 1
-        #         numbers.add(number)
-        #         valid = True
-        #         client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
-        #         break
-        # for s in stocks:
-
-        # if valid == False:
-        #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
+  
     return jsonify(request.form)
 
 # Returns json to update graphs
