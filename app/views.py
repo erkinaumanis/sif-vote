@@ -86,7 +86,6 @@ def recieve():
         else:
             symbol = str(request.json['Body'])
 
-        pdb.set_trace()
         # number exists
         if is_number_voted(symbol,number):
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
