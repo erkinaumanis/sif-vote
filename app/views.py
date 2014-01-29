@@ -1,37 +1,43 @@
 from datetime import datetime, timedelta
-from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify
+from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify, Blueprint
 from wtforms import Form, BooleanField, TextField, validators, ValidationError
-from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, \
-                    get_recent_numbers, get_all_pitches, vote_on_action, get_active_pitches
+# from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, \
+#                     get_recent_numbers, get_all_pitches, vote_on_action, get_active_pitches
 from app import app
 import twilio.twiml
 from twilio.rest import TwilioRestClient
 from lib import tokens
+import json
 import pdb
 
 client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
 
+views = Blueprint('views',__name__)
+
 # Renders page for dashboard and current pitches
-@app.route('/', methods=['GET'])
+@views.route('/', methods=['GET'])
 def index():
-    active_pitches = get_active_pitches()      
+    from models import get_active_pitches
+    active_pitches = get_active_pitches()
     return render_template('dashboard.html', stocks=active_pitches)
 
 # Renders page for latest pitch, basically a copy of current
-@app.route('/latest', methods=['GET'])
+@views.route('/latest', methods=['GET'])
 def latest():
+    from models import get_all_pitches
     # TODO: change to current pitches
     pitches = get_all_pitches()
     return render_template('latest.html', stocks=pitches)
 
 # Renders form for new pitches
-@app.route('/new', methods=['GET'])
+@views.route('/new', methods=['GET'])
 def new():
     return render_template('new.html')
 
 # Takes in form data for new pitches
-@app.route('/create', methods=['POST'])
+@views.route('/create', methods=['POST'])
 def create():
+    from models import get_all_pitches, create_action, create_pitch
     if request.method == "POST":
         data = request.form
 
@@ -49,54 +55,50 @@ def create():
         return render_template('list.html', stocks=pitches)
 
 # Renders page to view all pitches
-@app.route('/all', methods=['GET'])
+@views.route('/all', methods=['GET'])
 def all():
+    from models import get_all_pitches
     pitches = get_all_pitches()
     return render_template('list.html', stocks=pitches)
 
 # Renders page for an individual vote result from all votes
-@app.route('/vote/<string:ticker>', methods=['GET'])
+@views.route('/vote/<string:ticker>', methods=['GET'])
 def vote(ticker):
+    from models import get_pitch_actions
     # TODO: Make this return all stocks for a given pitch
     # vote_stocks = _filter_unique(stocks, stock_id)
     vote_stocks = get_pitch_actions(ticker)
     return render_template('display.html', stocks=vote_stocks)
 
 # Route to receive texts from twilio
-@app.route('/recieve', methods=['POST'])
+@views.route('/recieve', methods=['POST'])
 def recieve():
+    from models import vote_on_action, is_number_voted
     if request.method == "POST":
 
-        number = request.values.get('From')
+        if request.values.get('From'):
+            number = request.values.get('From')
+        else:
+            number = request.json['From']
+
+        if request.values.get('Body'):
+            symbol = str(request.values.get('Body'))
+        else:
+            symbol = str(request.json['Body'])
 
         # number exists
-        # if number in numbers:
-        #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks, but you already voted!')
-        # else:
-        # sweet         
-        ticker = "SH"
-        symbol = str(request.values.get('Body'))
-        valid = False
-
-        vote_on_action(ticker, symbol, number)
+        if is_number_voted(symbol,number):
+            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
+     
+        vote_on_action(symbol, number)
         client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
-
-
-        #     if s["decision"].lower() == vote and s["ticker"].lower() == ticker:
-        #         s["votes"] += 1
-        #         numbers.add(number)
-        #         valid = True
-        #         client.sms.messages.create(to=number, from_=TWILIO_NUM, body='Thanks for your vote!')
-        #         break
-        # for s in stocks:
-
-        # if valid == False:
-        #     client.sms.messages.create(to=number, from_=TWILIO_NUM, body='That is an invalid vote, please try again!')
+  
     return jsonify(request.form)
 
 # Returns json to update graphs
-@app.route('/update_votes', methods=['GET'])
+@views.route('/update_votes', methods=['GET'])
 def update_votes():
+    from models import get_active_pitches
     ap = get_active_pitches()
     ap_dict = {}
     for p in ap:
@@ -107,8 +109,9 @@ def update_votes():
     return jsonify(ap_dict)
 
 # Returns json to update recent vote numbers
-@app.route('/update_numbers', methods=['GET'])
+@views.route('/update_numbers', methods=['GET'])
 def update_numbers():
+    from models import get_recent_numbers
     rv = get_recent_numbers()    
     rv_dict = {}    
     for i,n in enumerate(rv):
