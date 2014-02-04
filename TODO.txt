@@ -1,5 +1,7 @@
 update latest vote page on cmcsif.org --> scraped import.io (use php)
 
+add validations to new vote page
+
 toggle active/inactive on homepage
 
 fix number updates or remove if they correspond to inactive pitch (datetime UTC now + recent activity expiration)
@@ -11,3 +13,5 @@ about page
 make view all display graphs instead of links
 
 fix js bug when navigate back to main page
+
+
