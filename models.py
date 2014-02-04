@@ -88,24 +88,18 @@ def vote_on_action(symbol, number):
     pitch_actions = list(Action.objects(symbol=symbol))
     ticker = pitch_actions[0].ticker
 
-    if len(pitch_actions) == 0:
-        return False
-    else:
+    if len(pitch_actions) != 0:
         votes = pitch_actions[0].vote_count + 1
         pitch_actions[0].update(set__vote_count = votes) # update action class
         create_vote(number,symbol,ticker) # update vote class
 
-    return True
-
 def get_active_pitches():
     ''' returns a list of active pitches '''
-    all_pitches = list(Pitch.objects())
-    active_pitches = [p for p in all_pitches if p.status == 'active']
+    active_pitches = list(Pitch.objects(status="active"))
     return [(p,get_pitch_actions(p.ticker)) for p in active_pitches]
 
 def get_recent_numbers():
     ''' returns a formatted list of all recent vote numbers '''
-    # TODO: fix this
     all_votes = list(Vote.objects(ticker="CLD"))
     recent_votes = [v for v in all_votes if (v.created_at - datetime.utcnow()) < timedelta(hours=24)]    
     return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]
@@ -118,3 +112,18 @@ def is_number_voted(symbol,number):
         if votes.number == number:
             return True
     return False
+
+def is_symbol_valid(symbol):
+    ''' returns true if symbol corresponds to valid, active action, false if not '''
+    symbol_actions = list(Action.objects(symbol=symbol))
+
+    if len(symbol_actions) == 0:
+        return False
+    else:
+        ticker = pitch_actions[0].ticker
+        active_pitches = list(Pitch.objects(ticker=ticker,status="active"))
+
+        if len(active_pitches) == 0:
+            return False
+
+    return True

@@ -89,10 +89,12 @@ def recieve():
         # number exists
         if is_number_voted(symbol,number):
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
-        elif vote_on_action(symbol, number):
-            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
-        else:
+        elif is_symbol_valid(symbol):
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Invalid symbol, try again')
+        else:
+            vote_on_action(symbol, number)
+            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
+            
   
     return jsonify(request.form)
 
