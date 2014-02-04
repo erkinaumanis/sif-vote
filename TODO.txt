@@ -15,3 +15,7 @@ make view all display graphs instead of links
 fix js bug when navigate back to main page
 
 
+-----------------------------------------
+
+
+curl -i -X POST -d '{"From":+13038082955,"Body":44444}' http://0.0.0.0:5000/recieve

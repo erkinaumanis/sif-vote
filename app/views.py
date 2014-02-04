@@ -1,8 +1,6 @@
 from datetime import datetime, timedelta
 from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify, Blueprint
 from wtforms import Form, BooleanField, TextField, validators, ValidationError
-# from models import get_all_pitches, create_pitch, create_action, get_pitch_actions, get_all_actions, \
-#                     get_recent_numbers, get_all_pitches, vote_on_action, get_active_pitches
 from app import app
 import twilio.twiml
 from twilio.rest import TwilioRestClient
@@ -10,6 +8,7 @@ from lib import tokens
 import json
 import pdb
 import sys
+import json
 
 client = TwilioRestClient(tokens.TWILIO_ID, tokens.TWILIO_TOKEN)
 
@@ -73,25 +72,28 @@ def vote(ticker):
 # Route to receive texts from twilio
 @views.route('/recieve', methods=['POST'])
 def recieve():
-    from models import vote_on_action, is_number_voted
-    if request.method == "POST":
+    from models import vote_on_action, is_number_voted, is_symbol_valid
+    if request.method == "POST":   
 
         if request.values.get('From'):
             number = int(request.values.get('From'))
         else:
-            number = int(request.json['From'])
+            number = int(json.loads(request.values.keys()[0])["From"])
 
         if request.values.get('Body'):
             symbol = str(request.values.get('Body'))
         else:
-            symbol = str(request.json['Body'])
+            symbol = str(json.loads(request.values.keys()[0])["Body"])
 
         # number exists
-        if is_number_voted(symbol,number):
+        if is_symbol_valid(symbol) is False:
+            print "invalid symbol"
+            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Invalid symbol, try again!')            
+        elif is_number_voted(symbol,number):
+            print "already voted"
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
-        elif is_symbol_valid(symbol):
-            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Invalid symbol, try again')
         else:
+            print "valid"
             vote_on_action(symbol, number)
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
             

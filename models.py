@@ -120,7 +120,7 @@ def is_symbol_valid(symbol):
     if len(symbol_actions) == 0:
         return False
     else:
-        ticker = pitch_actions[0].ticker
+        ticker = symbol_actions[0].ticker
         active_pitches = list(Pitch.objects(ticker=ticker,status="active"))
 
         if len(active_pitches) == 0:
