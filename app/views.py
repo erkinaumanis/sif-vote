@@ -77,6 +77,12 @@ def recieve():
     from models import vote_on_action, is_number_voted
     if request.method == "POST":
 
+        print "request: ", request
+        print "request.values: ", request.values
+
+        print "from: ", request.values.get('From')
+        print "body: ", request.values.get('Body')
+
         if request.values.get('From'):
             number = request.values.get('From')
         else:
@@ -87,6 +93,7 @@ def recieve():
         else:
             symbol = str(request.json['Body'])
 
+        sys.stdout.flush()
 
         # number exists
         if is_number_voted(symbol,number):
