@@ -85,9 +85,9 @@ def recieve():
         print "body: ", request.values.get('Body')
 
         if request.values.get('From'):
-            number = request.values.get('From')
+            number = int(request.values.get('From'))
         else:
-            number = request.json['From']
+            number = int(request.json['From'])
 
         if request.values.get('Body'):
             symbol = str(request.values.get('Body'))

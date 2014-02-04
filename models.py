@@ -110,5 +110,6 @@ def is_number_voted(symbol,number):
         print votes.number
         print number
         if votes.number == number:
+            return "DUPLICATE VOTE!!!"
             return True
     return False
