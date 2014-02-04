@@ -100,9 +100,14 @@ def get_active_pitches():
 
 def get_recent_numbers():
     ''' returns a formatted list of all recent vote numbers '''
-    all_votes = list(Vote.objects(ticker="CLD"))
-    recent_votes = [v for v in all_votes if (v.created_at - datetime.utcnow()) < timedelta(hours=24)]    
-    return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]
+    active_pitches = list(Pitch.objects(status="active"))
+    if len(active_pitches) > 0:
+        ticker = active_pitches[0].ticker
+        active_votes = list(Vote.objects(ticker=ticker))
+        recent_votes = [v for v in active_votes if (v.created_at - datetime.utcnow()) < timedelta(hours=24)]    
+        return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]
+    else:
+        return []
 
 def is_number_voted(symbol,number):
     ''' returns true if number has voted on symbol's pitch, false if number has not '''
