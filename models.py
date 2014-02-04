@@ -44,14 +44,15 @@ class Vote(Database().DynamicDocument):
 # --------------------------------------------
 
 def create_pitch(name, ticker, date):
+    ''' create and save a new pitch object '''
     new_pitch = Pitch()
     new_pitch.name = name
     new_pitch.ticker = ticker
     new_pitch.pitch_date = date
-    new_pitch.is_active = True
     new_pitch.save()
 
 def create_action(symbol, name, action, amount, ticker):
+    ''' create and save a new action object '''
     new_action = Action()
     new_action.symbol = symbol
     new_action.name = name
@@ -62,6 +63,7 @@ def create_action(symbol, name, action, amount, ticker):
     new_action.save()
 
 def create_vote(number, symbol, ticker):
+    ''' create and save a new vote object '''
     new_vote = Vote()
     new_vote.number = number
     new_vote.symbol = symbol
@@ -69,47 +71,50 @@ def create_vote(number, symbol, ticker):
     new_vote.save()
 
 def get_all_pitches():
+    ''' returns a list of all pitch objects '''
     return list(Pitch.objects())
 
 def get_all_actions():
+    ''' returns a list of all action objects '''
     return list(Action.objects())
 
 def get_pitch_actions(ticker):
-    # returns pitch data + actions
+    ''' returns a list of action objects corresponding to specified ticker '''
     return list(Action.objects(ticker = ticker))
 
 def vote_on_action(symbol, number):
-    # increments count and adds number to vote
-    
+    ''' increments count and adds number to vote and returns true if valid symbol,
+        false if symbol is invalid'''
     pitch_actions = list(Action.objects(symbol=symbol))
     ticker = pitch_actions[0].ticker
 
-    # update action class
-    if pitch_actions is not None:
+    if pitch_actions is None:
+        return False
+    else:
         votes = pitch_actions[0].vote_count + 1
-        pitch_actions[0].update(set__vote_count = votes)
+        pitch_actions[0].update(set__vote_count = votes) # update action class
+        create_vote(number,symbol,ticker) # update vote class
 
-    # update vote class
-    create_vote(number,symbol,ticker)
+    return True
 
 def get_active_pitches():
+    ''' returns a list of active pitches '''
     all_pitches = list(Pitch.objects())
     active_pitches = [p for p in all_pitches if p.status == 'active']
     return [(p,get_pitch_actions(p.ticker)) for p in active_pitches]
 
 def get_recent_numbers():
+    ''' returns a formatted list of all recent vote numbers '''
+    # TODO: fix this
     all_votes = list(Vote.objects(ticker="CLD"))
     recent_votes = [v for v in all_votes if (v.created_at - datetime.utcnow()) < timedelta(hours=24)]    
     return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]
 
 def is_number_voted(symbol,number):
+    ''' returns true if number has voted on symbol's pitch, false if number has not '''
     ticker = Action.objects(symbol=symbol)[0].ticker
     ticker_votes = Vote.objects(ticker=ticker)
     for votes in ticker_votes:
-        print "TESTING"
-        print votes.number
-        print number
         if votes.number == number:
-            return "DUPLICATE VOTE!!!"
             return True
     return False

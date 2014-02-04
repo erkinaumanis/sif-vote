@@ -1,13 +1,13 @@
-update latest vote page --> scraped import.io (use php)
+update latest vote page on cmcsif.org --> scraped import.io (use php)
 
-symbol --> code???
+toggle active/inactive on homepage
 
-toggle active/inactive
+fix number updates or remove if they correspond to inactive pitch (datetime UTC now + recent activity expiration)
 
-vote limit, better parsing
-
-fix view results
+finish tests
 
 about page
 
-datetime UTC now + recent activity expiration
+make view all display graphs instead of links
+
+fix js bug when navigate back to main page

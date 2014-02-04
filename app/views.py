@@ -66,8 +66,6 @@ def all():
 @views.route('/vote/<string:ticker>', methods=['GET'])
 def vote(ticker):
     from models import get_pitch_actions
-    # TODO: Make this return all stocks for a given pitch
-    # vote_stocks = _filter_unique(stocks, stock_id)
     vote_stocks = get_pitch_actions(ticker)
     return render_template('display.html', stocks=vote_stocks)
 
@@ -77,12 +75,6 @@ def vote(ticker):
 def recieve():
     from models import vote_on_action, is_number_voted
     if request.method == "POST":
-
-        print "request: ", request
-        print "request.values: ", request.values
-
-        print "from: ", request.values.get('From')
-        print "body: ", request.values.get('Body')
 
         if request.values.get('From'):
             number = int(request.values.get('From'))
@@ -94,14 +86,13 @@ def recieve():
         else:
             symbol = str(request.json['Body'])
 
-        sys.stdout.flush()
-
         # number exists
         if is_number_voted(symbol,number):
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks, but you already voted!')
-        else:
-            vote_on_action(symbol, number)
+        elif vote_on_action(symbol, number):
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
+        else:
+            client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Invalid symbol, try again')
   
     return jsonify(request.form)
 
@@ -127,11 +118,3 @@ def update_numbers():
     for i,n in enumerate(rv):
         rv_dict[i] = n
     return jsonify(rv_dict)
-
-
-def _filter_unique(stocks, stock_id):
-    vote_stocks = []
-    for s in stocks:
-        if stock_id == s["id"] or s["id"] == stock_id + 1:
-            vote_stocks.append(s)
-    return vote_stocks
