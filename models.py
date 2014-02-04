@@ -88,7 +88,7 @@ def vote_on_action(symbol, number):
     pitch_actions = list(Action.objects(symbol=symbol))
     ticker = pitch_actions[0].ticker
 
-    if pitch_actions is None:
+    if len(pitch_actions) == 0:
         return False
     else:
         votes = pitch_actions[0].vote_count + 1
