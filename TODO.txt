@@ -1,5 +1,7 @@
 update latest vote page on cmcsif.org --> scraped import.io (use php)
 
+show/hide button
+
 add validations to new vote page
 
 toggle active/inactive on homepage
