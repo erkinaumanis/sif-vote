@@ -13,14 +13,14 @@ class Pitch(Database().DynamicDocument):
     # TODO: add in other field params
     pitch_date = Database().StringField()
     status = Database().StringField(max_length=10, default="active")
-    name = Database().StringField(max_length=40)
+    name = Database().StringField(max_length=100)
     ticker = Database().StringField(max_length=5)
     created_at = Database().DateTimeField(default=datetime.now()) 
 
 class Action(Database().DynamicDocument):
     ''' class to hold the different possible actions of a pitch '''
     
-    name = Database().StringField(max_length=25)
+    name = Database().StringField(max_length=100)
     vote_count = Database().IntField(default = 0)
     vote_numbers = Database().ListField()
     vote_symbol = Database().StringField(max_length=1)
