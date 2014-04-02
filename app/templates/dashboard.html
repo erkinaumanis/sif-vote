@@ -18,9 +18,14 @@
       <div class="row">
         <div class="results span6 well offset1">
             <h2> Results </h2>
-              {% for stock in stocks %}
+              {% for stock in stocks %}              
                 <table class="table {{stock[0].ticker}}">
-                  <h2><small>{{stock[0].name}}</small></h2>
+                  <h2>
+                    <small>{{stock[0].name}}</small>
+                    <button id="show" class="btn btn-success">Show</button>
+                    <button id="hide" class="btn btn-danger">Hide</button>
+
+                  </h2>
                   <thead>
                     <tr>
                       <th class="result-symbol">Code</th>

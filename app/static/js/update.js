@@ -1,4 +1,13 @@
 $(document).ready(function() {
+
+  $('#hide').on('click',function() {
+    $('table').hide();
+  });
+
+  $('#show').on('click',function() {
+    $('table').show();
+  });
+  
   setInterval(function() {
     $.get("/update_votes", function(body) {
 
