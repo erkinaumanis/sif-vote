@@ -1,11 +1,11 @@
 $(document).ready(function() {
 
-  $('#hide').on('click',function() {
-    $('table').hide();
+  $('.hide-button').on('click',function() {
+    $(this).closest('.action').children('table').hide()
   });
 
-  $('#show').on('click',function() {
-    $('table').show();
+  $('.show-button').on('click',function() {
+    $(this).closest('.action').children('table').show()
   });
   
   setInterval(function() {
