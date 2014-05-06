@@ -1,4 +1,6 @@
-$(document).ready(function() {
+$(function () {
+
+  var update_url;
 
   $('.hide-button').on('click',function() {
     $(this).closest('.action').children('table').hide()
@@ -8,8 +10,14 @@ $(document).ready(function() {
     $(this).closest('.action').children('table').show()
   });
   
+  if (document.location.href.indexOf("vote") === -1) {
+    update_url = "../update_votes";
+  } else {
+    update_url = "../vote/" + document.location.href.substring(27,100) + "/update_votes";
+  }
+
   setInterval(function() {
-    $.get("/update_votes", function(body) {
+    $.get(update_url, function(body) {
 
       for (var ticker in body) {
         if (body.hasOwnProperty(ticker)) {
@@ -32,7 +40,6 @@ $(document).ready(function() {
 
               var pcount = (action[actionId] / actionVoteTotal) * 100;
 
-
               $(".table." + ticker + " #" + actionId + " .count").html(action[actionId]);
               $(".table." + ticker + " #" + 
                 actionId + " .progress-bar").css("width",pcount + "%");
@@ -46,7 +53,7 @@ $(document).ready(function() {
   }, 1000);
 
   setInterval(function() {
-    $.get("/update_numbers", function(body) {
+    $.get("../update_numbers", function(body) {
       var templ = ""
       for (var key in body) {
         templ = templ + "<div>" + body[key] + "</div>";

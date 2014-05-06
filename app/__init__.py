@@ -1,4 +1,3 @@
-# this code allows us to import modules inside the lib directory
 import sys, os 
 sys.path.insert(0, os.path.abspath(".."))
 

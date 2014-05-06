@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 from flask import Flask, request, redirect, render_template, session, url_for, send_from_directory, jsonify, Blueprint
-from wtforms import Form, BooleanField, TextField, validators, ValidationError
 from app import app
 import twilio.twiml
 from twilio.rest import TwilioRestClient
-from lib import tokens
+from lib import tokens,forms
 import json
 import pdb
 import sys
@@ -34,21 +33,24 @@ def latest():
 def new():
     return render_template('new.html')
 
-# Takes in form data for new pitches
+@views.route('/about', methods=['GET'])
+def about():
+    return render_template('about.html')
+
+# Processes form data for new pitches
 @views.route('/create', methods=['POST'])
 def create():
     from models import get_all_pitches, create_action, create_pitch
-    if request.method == "POST":
-        data = request.form
 
-        # take out $ sign in 
-        data['amount-1'].replace('$',"")
-        data['amount-2'].replace('$',"")
+    if request.method == "POST":
+
+        data = request.form
+        amount1,amount2 = forms.preprocess_new_pitch(data)  
 
         # add new pitches and actions to mongo
         create_pitch(data['pitch-name'], data['ticker'], data['pitch-date'])
-        create_action(data['symbol-1'], data['pitch-name'], data['action-1'], data['amount-1'], data['ticker'])
-        create_action(data['symbol-2'], data['pitch-name'], data['action-2'], data['amount-2'], data['ticker'])
+        create_action(data['pitch-name'], data['action-1'], amount1, data['ticker'])
+        create_action(data['pitch-name'], data['action-2'], amount2, data['ticker'])
 
         pitches = get_all_pitches()
         
@@ -64,9 +66,9 @@ def all():
 # Renders page for an individual vote result from all votes
 @views.route('/vote/<string:ticker>', methods=['GET'])
 def vote(ticker):
-    from models import get_pitch_actions
-    vote_stocks = get_pitch_actions(ticker)
-    return render_template('display.html', stocks=vote_stocks)
+    from models import get_pitch_data_by_ticker
+    vote_pitches = get_pitch_data_by_ticker(ticker)
+    return render_template('display.html', stocks=vote_pitches)
 
 
 # Route to receive texts from twilio
@@ -97,7 +99,6 @@ def recieve():
             vote_on_action(symbol, number)
             client.sms.messages.create(to=number, from_=tokens.TWILIO_NUM, body='Thanks for your vote!')
             
-  
     return jsonify(request.form)
 
 # Returns json to update graphs
@@ -122,3 +123,16 @@ def update_numbers():
     for i,n in enumerate(rv):
         rv_dict[i] = n
     return jsonify(rv_dict)
+
+@views.route('/vote/<string:ticker>/update_votes', methods=['GET'])
+def view(ticker):
+    from models import get_pitch_data_by_ticker
+    ap = get_pitch_data_by_ticker(ticker)
+    ap_dict = {}
+    for p in ap:
+        a_dict = {}
+        for a in p[1]:
+            a_dict[a.action_id] = a.vote_count
+        ap_dict[p[0].ticker] = a_dict
+    return jsonify(ap_dict)
+

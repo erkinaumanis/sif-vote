@@ -1,6 +1,9 @@
 *.py[cod]
 venv
 
+tokens.py
+config.py
+
 # C extensions
 *.so
 

@@ -10,22 +10,21 @@ import pdb
 class Pitch(Database().DynamicDocument):
     ''' class to hold the data of a particular pitch the fund is voting on '''
 
-    # TODO: add in other field params
     pitch_date = Database().StringField()
     status = Database().StringField(max_length=10, default="active")
-    name = Database().StringField(max_length=100)
-    ticker = Database().StringField(max_length=5)
+    name = Database().StringField(max_length=500)
+    ticker = Database().StringField(max_length=50)
     created_at = Database().DateTimeField(default=datetime.now()) 
 
 class Action(Database().DynamicDocument):
     ''' class to hold the different possible actions of a pitch '''
     
-    name = Database().StringField(max_length=100)
-    vote_count = Database().IntField(default = 0)
+    name = Database().StringField(max_length=500)
+    vote_count = Database().IntField(default=0)
     vote_numbers = Database().ListField()
-    vote_symbol = Database().StringField(max_length=1)
-    ticker = Database().StringField(max_length=5)
-    action = Database().StringField(max_length=40)
+    vote_symbol = Database().StringField(max_length=10)
+    ticker = Database().StringField(max_length=50)
+    action = Database().StringField(max_length=50)
     amount = Database().IntField()
     action_id = Database().IntField()
     created_at = Database().DateTimeField(default=datetime.now())
@@ -51,10 +50,10 @@ def create_pitch(name, ticker, date):
     new_pitch.pitch_date = date
     new_pitch.save()
 
-def create_action(symbol, name, action, amount, ticker):
+def create_action(name, action, amount, ticker):
     ''' create and save a new action object '''
     new_action = Action()
-    new_action.symbol = symbol
+    new_action.symbol = generate_symbol()
     new_action.name = name
     new_action.action = action
     new_action.amount = amount
@@ -70,6 +69,21 @@ def create_vote(number, symbol, ticker):
     new_vote.ticker = ticker
     new_vote.save()
 
+def generate_symbol():
+    ''' generates a unique random integer to use as the action's symbol '''
+    
+    symbol = str(randint(1000,9999))
+    active_pitches = list(Pitch.objects(status="active"))
+    active_symbols = []
+    for pitch in active_pitches:
+        actions = list(Action.objects(name=pitch.name))
+        active_symbols += [action.symbol for action in actions]
+
+    while symbol in active_symbols:
+        symbol = str(randint(1000,9999))
+
+    return symbol
+
 def get_all_pitches():
     ''' returns a list of all pitch objects '''
     return list(Pitch.objects())
@@ -78,6 +92,16 @@ def get_all_actions():
     ''' returns a list of all action objects '''
     return list(Action.objects())
 
+def get_pitch_data_by_ticker(ticker):
+    ''' returns the pitch and corresponding actions with user provided ticker if exists, 
+        if not returns an empty list '''
+    ticker_pitches=list(Pitch.objects(ticker=ticker))
+    return [(p,get_pitch_actions(p.ticker)) for p in ticker_pitches]
+
+def get_pitch_by_ticker(ticker):
+    ''' returns the pitch with user provided ticker if exists, if not returns an empty list '''
+    return list(Pitch.objects(ticker=ticker))
+
 def get_pitch_actions(ticker):
     ''' returns a list of action objects corresponding to specified ticker '''
     return list(Action.objects(ticker = ticker))
@@ -85,12 +109,16 @@ def get_pitch_actions(ticker):
 def vote_on_action(symbol, number):
     ''' increments count and adds number to vote and returns true if valid symbol,
         false if symbol is invalid'''
-    pitch_actions = list(Action.objects(symbol=symbol))
-    ticker = pitch_actions[0].ticker
+    active_pitches = list(Pitch.objects(status="active"))
+    active_actions = []
+    for pitch in active_pitches:
+        active_actions += list(Action.objects(name=pitch.name,symbol=symbol))
 
-    if len(pitch_actions) != 0:
-        votes = pitch_actions[0].vote_count + 1
-        pitch_actions[0].update(set__vote_count = votes) # update action class
+    ticker = active_actions[0].ticker
+
+    if len(active_actions) != 0:
+        votes = active_actions[0].vote_count + 1
+        active_actions[0].update(set__vote_count = votes) # update action class
         create_vote(number,symbol,ticker) # update vote class
 
 def get_active_pitches():

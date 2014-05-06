@@ -15,7 +15,7 @@ from app import *
 if __name__ == "__main__":
     from app import config
     
-    # decide which environment to set up
+    # environment configuration
     parser = OptionParser()
     parser.add_option("--test", action="store_true", dest="test_mode") 
     parser.add_option("--prod", action="store_true", dest="prod_mode")
