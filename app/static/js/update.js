@@ -13,7 +13,7 @@ $(function () {
   if (document.location.href.indexOf("vote") === -1) {
     update_url = "../update_votes";
   } else {
-    update_url = "../vote/" + document.location.href.substring(27,100) + "/update_votes";
+    update_url = "../vote/" + document.location.href.split("/")[4] + "/update_votes";
   }
 
   setInterval(function() {
