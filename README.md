@@ -1,7 +1,7 @@
 sif-vote
 ========
 
-A simple SMS-based voting application for the CMC Student Investment Fund.
+A simple SMS-based voting application for the CMC Student Investment Fund. This app is deployed at http://sif-vote.herokuapp.com
 
 ###Getting Started
 
