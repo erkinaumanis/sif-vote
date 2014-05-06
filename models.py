@@ -69,21 +69,6 @@ def create_vote(number, symbol, ticker):
     new_vote.ticker = ticker
     new_vote.save()
 
-def generate_symbol():
-    ''' generates a unique random integer to use as the action's symbol '''
-    
-    symbol = str(randint(1000,9999))
-    active_pitches = list(Pitch.objects(status="active"))
-    active_symbols = []
-    for pitch in active_pitches:
-        actions = list(Action.objects(name=pitch.name))
-        active_symbols += [action.symbol for action in actions]
-
-    while symbol in active_symbols:
-        symbol = str(randint(1000,9999))
-
-    return symbol
-
 def get_all_pitches():
     ''' returns a list of all pitch objects '''
     return list(Pitch.objects())
@@ -111,7 +96,7 @@ def vote_on_action(symbol, number):
         false if symbol is invalid'''
     active_pitches = list(Pitch.objects(status="active"))
     active_actions = []
-    
+
     for pitch in active_pitches:
         active_actions += list(Action.objects(name=pitch.name,symbol=symbol))
 
@@ -152,6 +137,10 @@ def update_pitch_status(ticker):
         pitch.status = "active"
     pitch.save()
 
+#---------------------------------------------
+# helper functions and validations
+# --------------------------------------------
+
 def is_number_voted(symbol,number):
     ''' returns true if number has voted on symbol's pitch, false if number has not '''
     ticker = Action.objects(symbol=symbol)[0].ticker
@@ -175,3 +164,18 @@ def is_symbol_valid(symbol):
             return False
 
     return True
+
+def generate_symbol():
+    ''' generates a unique random integer to use as the action's symbol '''
+    
+    symbol = str(randint(1000,9999))
+    active_pitches = list(Pitch.objects(status="active"))
+    active_symbols = []
+    for pitch in active_pitches:
+        actions = list(Action.objects(name=pitch.name))
+        active_symbols += [action.symbol for action in actions]
+
+    while symbol in active_symbols:
+        symbol = str(randint(1000,9999))
+
+    return symbol
