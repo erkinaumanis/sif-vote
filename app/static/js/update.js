@@ -10,7 +10,7 @@ $(function () {
     $(this).closest('.action').children('table').show()
   });
 
-  if (document.location.href.indexOf("vote") === -1) {
+  if (document.location.href.split("herokuapp")[1].indexOf("vote") === -1) {
     update_url = "../update_votes";
   } else {
     update_url = "../vote/" + document.location.href.split("/")[4] + "/update_votes";
