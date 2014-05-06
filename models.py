@@ -111,6 +111,7 @@ def vote_on_action(symbol, number):
         false if symbol is invalid'''
     active_pitches = list(Pitch.objects(status="active"))
     active_actions = []
+    
     for pitch in active_pitches:
         active_actions += list(Action.objects(name=pitch.name,symbol=symbol))
 
@@ -136,6 +137,20 @@ def get_recent_numbers():
         return ["("+str(v.number)[1:4]+") "+str(v.number)[4:7]+"-"+str(v.number)[7:11]+" has voted!" for v in recent_votes]
     else:
         return []
+
+def delete_pitch(ticker):
+    ''' deletes the pitch with user provided ticker '''
+    pitch = list(Pitch.objects(ticker=ticker))
+    pitch[0].delete() 
+
+def update_pitch_status(ticker):
+    ''' toggles the pitch status with user provided ticker'''
+    pitch = list(Pitch.objects(ticker=ticker))[0]
+    if pitch.status == "active":
+        pitch.status = "inactive"
+    elif pitch.status == "inactive":
+        pitch.status = "active"
+    pitch.save()
 
 def is_number_voted(symbol,number):
     ''' returns true if number has voted on symbol's pitch, false if number has not '''

@@ -61,6 +61,7 @@ def create():
 def all():
     from models import get_all_pitches
     pitches = get_all_pitches()
+    pitches.sort(key=lambda x: x.created_at,reverse=True)    
     return render_template('list.html', stocks=pitches)
 
 # Renders page for an individual vote result from all votes
@@ -70,6 +71,21 @@ def vote(ticker):
     vote_pitches = get_pitch_data_by_ticker(ticker)
     return render_template('display.html', stocks=vote_pitches)
 
+@views.route('/delete/<string:ticker>', methods=['GET'])
+def delete(ticker):
+    from models import delete_pitch, get_all_pitches
+    delete_pitch(ticker)
+    pitches = get_all_pitches()
+    pitches.sort(key=lambda x: x.created_at,reverse=True)   
+    return render_template('list.html', stocks=pitches)
+    
+@views.route('/update/<string:ticker>', methods=['GET'])
+def update(ticker):
+    from models import update_pitch_status, get_all_pitches
+    update_pitch_status(ticker)
+    pitches = get_all_pitches()
+    pitches.sort(key=lambda x: x.created_at,reverse=True)  
+    return render_template('list.html', stocks=pitches)
 
 # Route to receive texts from twilio
 @views.route('/recieve', methods=['POST'])

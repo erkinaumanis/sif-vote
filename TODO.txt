@@ -1,17 +1,12 @@
-add validations to new vote page for unique ticker and name
+TODO
+----
 
-toggle active/inactive on homepage
+-finish tests
 
-finish tests
+-remove tokens and config files from git
 
-about page
+-unique ticker/name issues (need to be unique)
 
-make view all display graphs instead of links
-
-fix js bug when navigate back to main page
-
-
------------------------------------------
-
-
-curl -i -X POST -d '{"From":+13038082955,"Body":44444}' http://0.0.0.0:5000/recieve
+Testing with CURL
+-----------------
+curl -i -X POST -d '{"From":+13038082955,"Body":"some text"}' http://0.0.0.0:5000/recieve

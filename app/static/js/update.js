@@ -9,7 +9,7 @@ $(function () {
   $('.show-button').on('click',function() {
     $(this).closest('.action').children('table').show()
   });
-  
+
   if (document.location.href.indexOf("vote") === -1) {
     update_url = "../update_votes";
   } else {

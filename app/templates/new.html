@@ -18,7 +18,7 @@
 		  <div class="create span8 well offset1">
 				<h4> Create a new pitch: </h4>
 
-				<form name="create-pitch" method="post" action="/create" role="form">
+				<form name="create-pitch" method="post" action="/create" onsubmit="return validateForm()" role="form">
 				  <div class="form-group">
 				    <label for="exampleInputEmail1">Pitch name</label>
 				    <input type="text" class="form-control" id="exampleInputEmail1" name="pitch-name" placeholder="eg. Take Two Interactive Corp.">
